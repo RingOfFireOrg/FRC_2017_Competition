@@ -10,10 +10,10 @@ public class HDrive extends RobotDrive {
 	   motor = new Victor(shimmyMotor);
 	}
 	public void shimmyLeft(){
-		motor.set(1.0);
+		motor.set(-1.0);
 	}
 	public void shimmyRight(){
-		motor.set(-1.0);
+		motor.set(1.0);
 	}
 	public void shimmyStop(){
 		motor.set(0.0);
