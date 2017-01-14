@@ -7,3 +7,4 @@ Let's make a robot!
 ## Software installation instructions
 
 [Instructions found Here](https://wpilib.screenstepslive.com/s/4485/m/13503).
+[Instructions found or Here](https://wpilib.screenstepslive.com/s/4485/m/13503/l/144984-imaging-your-roborio).
