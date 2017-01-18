@@ -1,9 +1,8 @@
 package org.usfirst.frc.team3459.robot;
-import edu.wpi.first.wpilibj.SampleRobot;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import com.ctre.CANTalon; 
 
 /**
  * This is a demo program showing the use of the RobotDrive class, specifically

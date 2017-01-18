@@ -12,4 +12,7 @@ public class RobotMap {
 //Buttons
 	public static int shimmyLeft = 2;
 	public static int shimmyRight = 2;
+//talon ID's
+	public static int shimmyTalon1 = 1;  //maybe correct device ID?
+	public static int shimmyTalon2 = 2;  //maybe correct device ID?
 }
