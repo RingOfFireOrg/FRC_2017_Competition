@@ -1,7 +1,8 @@
 package org.usfirst.frc.team3459.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow; 
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
 
 /**
  * Don't change the name of this or it won't work. (The manifest looks for "Robot")
@@ -11,6 +12,7 @@ public class Robot extends IterativeRobot {
 	/*
 	 * Member variables go here 
 	 */
+	UltrasonicSensor rangeFinder = new UltrasonicSensor();
 	HDrive driveTrain = new HDrive(RobotMap.leftMotor, RobotMap.rightMotor, RobotMap.shimmyMotor); // class that handles basic drive
 	// operations
 
@@ -45,6 +47,9 @@ public class Robot extends IterativeRobot {
 		else{
 			driveTrain.shimmyStop();
 		}
+		SmartDashboard.putNumber("distance", rangeFinder.getDistance());
+		
+		
     }
 
     /**
