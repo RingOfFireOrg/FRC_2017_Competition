@@ -14,7 +14,7 @@ public class RobotMap {
 	public static int shimmyRight = 2;
 //talon ID's
 	public static int shimmyTalon1 = 14;  //maybe correct device ID?
-	public static int shimmyTalon2 = 10;  //maybe correct device ID?
+	public static int shimmyTalon2 = 10;   //maybe correct device ID?
 	
 	// analog ports
 	public static int ultrasonic = 0;
