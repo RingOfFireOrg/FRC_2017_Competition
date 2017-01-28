@@ -73,6 +73,8 @@ public class Robot extends IterativeRobot {
 	 * This function is called once when we go into the Autonomous mode
 	 */
 	public void autonomousInit() {
+		ahrs.reset();
+		
 	}
 
 	/**
@@ -80,6 +82,8 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void autonomousPeriodic() {
+		driveTrain.turnToAngle(90.0f);
+		driveTrain.drive(0.0, 0.0, 0.0, ahrs.getAngle());
 	}
 
 	/**
