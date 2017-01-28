@@ -18,25 +18,36 @@ public class Robot extends IterativeRobot {
 	 * Member variables go here
 	 */
 	UltrasonicSensor rangeFinder = new UltrasonicSensor();
-	PTDrive driveTrain = new PTDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor,
-			 					RobotMap.frontRightMotor, RobotMap.rearRightMotor);
-			
+	PTDrive driveTrain = new PTDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
+			RobotMap.rearRightMotor);
+
 	// operations
 
 	AHRS ahrs;
-//	Joystick leftStick = new Joystick(RobotMap.leftStick);
-//	Joystick rightStick = new Joystick(RobotMap.rightStick);
+	// Joystick leftStick = new Joystick(RobotMap.leftStick);
+	// Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
-	
-	public double speedInput(double input){
+
+	public double speedInput(double input) {
 		double output;
-		
-		output = input*input;
+
+		output = input * input;
 		if (input < 0.0)
-			output = output*-1.0;
+			output = output * -1.0;
 		return output;
 	}
-	
+
+	public double normalizeAngle(double input) {
+		double output = input;
+		while (output > 180) {
+			output = output - 360;
+		}
+		while (output < -180){
+			output = output + 360;
+		}
+		return output;
+	}
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -61,12 +72,18 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void teleopPeriodic() {
-		driveTrain.drive(speedInput(driveStick.getX()), 
-					 	 speedInput(driveStick.getY()),
-						 speedInput(driveStick.getTwist()),
-						 ahrs.getAngle());
-		SmartDashboard.putNumber("distance", rangeFinder.getDistance());	
-		SmartDashboard.putNumber("angle", ahrs.getAngle() % 180 );
+		int pov = driveStick.getPOV();
+		if (pov != -1) {
+			double targetAngle = pov;
+			if (pov > 180) {
+				targetAngle = pov - 360;
+			}
+			driveTrain.turnToAngle(targetAngle);
+		}
+		driveTrain.drive(speedInput(driveStick.getX()), speedInput(driveStick.getY()),
+				speedInput(driveStick.getTwist()), normalizeAngle(ahrs.getAngle()));
+		SmartDashboard.putNumber("distance", rangeFinder.getDistance());
+		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 	}
 
 	/**
@@ -74,7 +91,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousInit() {
 		ahrs.reset();
-		
+
 	}
 
 	/**
@@ -83,7 +100,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousPeriodic() {
 		driveTrain.turnToAngle(90.0f);
-		driveTrain.drive(0.0, 0.0, 0.0, ahrs.getAngle());
+		driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()));
 	}
 
 	/**
