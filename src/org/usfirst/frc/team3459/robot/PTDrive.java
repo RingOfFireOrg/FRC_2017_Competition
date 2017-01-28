@@ -27,6 +27,12 @@ public class PTDrive extends RobotDrive {
 
 	private double getDeltaAngle(double targetAngle, double currentAngle) {
 		double deltaAngle = targetAngle - currentAngle;
+		if (deltaAngle > 180){
+			deltaAngle = deltaAngle - 360;
+		}
+		if (deltaAngle < -180){
+			deltaAngle = deltaAngle + 360;
+		}
 		return deltaAngle;
 	}
 
