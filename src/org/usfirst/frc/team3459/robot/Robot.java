@@ -28,6 +28,15 @@ public class Robot extends IterativeRobot {
 //	Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
 	
+	public double speedInput(double input){
+		double output;
+		
+		output = input*input;
+		if (input < 0.0)
+			output = output*-1.0;
+		return output;
+	}
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -44,6 +53,7 @@ public class Robot extends IterativeRobot {
 	 * This function is called once when we go into the teleop mode
 	 */
 	public void teleopInit() {
+		ahrs.reset();
 	}
 
 	/**
@@ -51,8 +61,12 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void teleopPeriodic() {
-		driveTrain.drive(driveStick.getX(), driveStick.getY(), driveStick.getTwist(), 0.0f);
+		driveTrain.drive(speedInput(driveStick.getX()), 
+					 	 speedInput(driveStick.getY()),
+						 speedInput(driveStick.getTwist()),
+						 ahrs.getAngle());
 		SmartDashboard.putNumber("distance", rangeFinder.getDistance());	
+		SmartDashboard.putNumber("angle", ahrs.getAngle() % 180 );
 	}
 
 	/**
