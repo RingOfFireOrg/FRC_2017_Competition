@@ -27,7 +27,8 @@ public class Robot extends IterativeRobot {
 	// Joystick leftStick = new Joystick(RobotMap.leftStick);
 	// Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
-
+	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
+	
 	public double speedInput(double input) {
 		double output;
 
@@ -91,7 +92,8 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousInit() {
 		ahrs.reset();
-
+		int selector = controlPanel.getProgram();
+		SmartDashboard.putNumber("Autonomous Program", selector);
 	}
 
 	/**
