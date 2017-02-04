@@ -9,7 +9,7 @@ public class RobotMap {
 // CAN INSTEAD OF PWM	
 	public static final int shooterMotor = 0;
 	public static final int feederMotor = 1;
-
+	public static final int climberMotor = 2;
 
 	// Joysticks
 //	public static int leftStick = 1;   not currently used

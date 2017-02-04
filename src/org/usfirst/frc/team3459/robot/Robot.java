@@ -21,6 +21,7 @@ public class Robot extends IterativeRobot {
 	PTDrive driveTrain = new PTDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
 			RobotMap.rearRightMotor);
 	Shooter shooter = new Shooter();
+	Climber climber = new Climber();
 
 	// operations
 
@@ -86,7 +87,8 @@ public class Robot extends IterativeRobot {
 				speedInput(driveStick.getTwist()), normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("distance", rangeFinder.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
-		this.testShooter();
+		testShooter();
+		testClimber();
 	}
 
 	public void testShooter() {
@@ -100,7 +102,14 @@ public class Robot extends IterativeRobot {
 			shooter.stopFeeder();
 	}
 
+	public void testClimber() {
+		if (driveStick.getRawButton(10)) {
+			climber.startClimber();
 
+		} else {
+			climber.stopClimber();
+		}
+	}
 
 	/**
 	 * This function is called once when we go into the Autonomous mode
