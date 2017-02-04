@@ -17,7 +17,8 @@ public class Robot extends IterativeRobot {
 	/*
 	 * Member variables go here
 	 */
-	UltrasonicSensor rangeFinder = new UltrasonicSensor();
+	UltrasonicSensor ultrasonicBack = new UltrasonicSensor(RobotMap.ultrasonicBack);
+	UltrasonicSensor ultrasonicLeft = new UltrasonicSensor(RobotMap.ultrasonicLeft);
 	PTDrive driveTrain = new PTDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
 			RobotMap.rearRightMotor);
 
@@ -42,7 +43,7 @@ public class Robot extends IterativeRobot {
 		while (output > 180) {
 			output = output - 360;
 		}
-		while (output < -180){
+		while (output < -180) {
 			output = output + 360;
 		}
 		return output;
@@ -82,7 +83,8 @@ public class Robot extends IterativeRobot {
 		}
 		driveTrain.drive(speedInput(driveStick.getX()), speedInput(driveStick.getY()),
 				speedInput(driveStick.getTwist()), normalizeAngle(ahrs.getAngle()));
-		SmartDashboard.putNumber("distance", rangeFinder.getDistance());
+		SmartDashboard.putNumber("distance left", ultrasonicLeft.getDistance());
+		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 	}
 
@@ -99,8 +101,19 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void autonomousPeriodic() {
-		driveTrain.turnToAngle(90.0f);
-		driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()));
+		auto_driveForward();
+
+	}
+
+	public void auto_driveForward() {
+		if (ultrasonicBack.getDistance() > 100.0) {
+			driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()));// these
+																				// numbers
+																				// need
+																				// changing
+		} else {
+			driveTrain.drive(0.0, 0.0, 0.0, 0.0);
+		}
 	}
 
 	/**

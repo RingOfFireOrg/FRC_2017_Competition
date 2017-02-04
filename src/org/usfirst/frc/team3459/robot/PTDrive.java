@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class PTDrive extends RobotDrive {
 	boolean rotateToAngle = false;
 	double targetAngle = 0.0f;
-	double kP = 0.03f;
+	double kP = 0.02f;
 
 	public PTDrive(int frontLeftMotor, int rearLeftMotor, int frontRightMotor, int rearRightMotor) {
 		super(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);

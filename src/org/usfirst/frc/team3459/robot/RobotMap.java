@@ -15,5 +15,6 @@ public class RobotMap {
 
 	
 	// analog ports
-	public static final int ultrasonic = 0;
-	}
+	public static final int ultrasonicBack = 0;
+	public static final int ultrasonicLeft = 1;
+}
