@@ -1,10 +1,14 @@
 package org.usfirst.frc.team3459.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team3459.robot.Cameras.CameraType;
+
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
 
@@ -21,6 +25,10 @@ public class Robot extends IterativeRobot {
 	UltrasonicSensor ultrasonicLeft = new UltrasonicSensor(RobotMap.ultrasonicLeft);
 	PTDrive driveTrain = new PTDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
 			RobotMap.rearRightMotor);
+	Shooter shooter = new Shooter();
+	Climber climber = new Climber();
+	PickerUpper pickerupper = new PickerUpper();
+	Cameras cameras = new Cameras();
 
 	// operations
 
@@ -28,6 +36,7 @@ public class Robot extends IterativeRobot {
 	// Joystick leftStick = new Joystick(RobotMap.leftStick);
 	// Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
+	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
 
 	public double speedInput(double input) {
 		double output;
@@ -86,6 +95,45 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("distance left", ultrasonicLeft.getDistance());
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
+		testShooter();
+		testClimber();
+		testPickerUpper();
+		if(driveStick.getRawButton(6)){
+			cameras.changeCamera(CameraType.FRONT);
+		}
+		if(driveStick.getRawButton(4)){
+			cameras.changeCamera(CameraType.BACK);
+		}
+		
+	}
+
+	public void testShooter() {
+		if (driveStick.getRawButton(7))
+			shooter.startWheels();
+		if (driveStick.getRawButton(8))
+			shooter.stopWheels();
+		if (driveStick.getRawButton(11))
+			shooter.startFeeder();
+		if (driveStick.getRawButton(12))
+			shooter.stopFeeder();
+	}
+
+	public void testClimber() {
+		if (driveStick.getRawButton(10)) {
+			climber.startClimber();
+
+		} else {
+			climber.stopClimber();
+		}
+	}
+	
+	public void testPickerUpper(){
+		if (driveStick.getRawButton(5)){
+			pickerupper.startPickup();
+		}
+		if (driveStick.getRawButton(3)){
+			pickerupper.stopPickup();
+		}
 	}
 
 	/**
@@ -93,7 +141,8 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousInit() {
 		ahrs.reset();
-
+		int selector = controlPanel.getProgram();
+		SmartDashboard.putNumber("Autonomous Program", selector);
 	}
 
 	/**
