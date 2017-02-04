@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team3459.robot.Cameras.CameraType;
+
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
 
@@ -24,6 +27,7 @@ public class Robot extends IterativeRobot {
 	Shooter shooter = new Shooter();
 	Climber climber = new Climber();
 	PickerUpper pickerupper = new PickerUpper();
+	Cameras cameras = new Cameras();
 
 	// operations
 
@@ -58,7 +62,6 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-		CameraServer.getInstance().startAutomaticCapture();
 		try {
 			ahrs = new AHRS(SerialPort.Port.kUSB);
 		} catch (RuntimeException ex) {
@@ -93,6 +96,13 @@ public class Robot extends IterativeRobot {
 		testShooter();
 		testClimber();
 		testPickerUpper();
+		if(driveStick.getRawButton(6)){
+			cameras.changeCamera(CameraType.FRONT);
+		}
+		if(driveStick.getRawButton(4)){
+			cameras.changeCamera(CameraType.BACK);
+		}
+		
 	}
 
 	public void testShooter() {
