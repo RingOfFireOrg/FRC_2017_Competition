@@ -22,6 +22,7 @@ public class Robot extends IterativeRobot {
 			RobotMap.rearRightMotor);
 	Shooter shooter = new Shooter();
 	Climber climber = new Climber();
+	PickerUpper pickerupper = new PickerUpper();
 
 	// operations
 
@@ -89,6 +90,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		testShooter();
 		testClimber();
+		testPickerUpper();
 	}
 
 	public void testShooter() {
@@ -108,6 +110,15 @@ public class Robot extends IterativeRobot {
 
 		} else {
 			climber.stopClimber();
+		}
+	}
+	
+	public void testPickerUpper(){
+		if (driveStick.getRawButton(5)){
+			pickerupper.startPickup();
+		}
+		if (driveStick.getRawButton(3)){
+			pickerupper.stopPickup();
 		}
 	}
 
