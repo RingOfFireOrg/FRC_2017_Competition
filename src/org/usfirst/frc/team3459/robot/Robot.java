@@ -20,6 +20,7 @@ public class Robot extends IterativeRobot {
 	UltrasonicSensor rangeFinder = new UltrasonicSensor();
 	PTDrive driveTrain = new PTDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
 			RobotMap.rearRightMotor);
+	Shooter shooter = new Shooter();
 
 	// operations
 
@@ -28,7 +29,7 @@ public class Robot extends IterativeRobot {
 	// Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
-	
+
 	public double speedInput(double input) {
 		double output;
 
@@ -43,7 +44,7 @@ public class Robot extends IterativeRobot {
 		while (output > 180) {
 			output = output - 360;
 		}
-		while (output < -180){
+		while (output < -180) {
 			output = output + 360;
 		}
 		return output;
@@ -85,7 +86,21 @@ public class Robot extends IterativeRobot {
 				speedInput(driveStick.getTwist()), normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("distance", rangeFinder.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
+		this.testShooter();
 	}
+
+	public void testShooter() {
+		if (driveStick.getRawButton(7))
+			shooter.startWheels();
+		if (driveStick.getRawButton(8))
+			shooter.stopWheels();
+		if (driveStick.getRawButton(11))
+			shooter.startFeeder();
+		if (driveStick.getRawButton(12))
+			shooter.stopFeeder();
+	}
+
+
 
 	/**
 	 * This function is called once when we go into the Autonomous mode
