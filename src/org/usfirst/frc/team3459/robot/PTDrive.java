@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3459.robot;
 
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PTDrive extends RobotDrive {
