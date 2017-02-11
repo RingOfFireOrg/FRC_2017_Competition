@@ -95,27 +95,28 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		testShooter();
-		testClimber();
-		testPickerUpper();
-		if(driveStick.getRawButton(6)){
+		//testClimber();
+		//testPickerUpper();
+		/*if(driveStick.getRawButton(6)){
 			cameras.changeCamera(CameraType.FRONT);
 		}
 		if(driveStick.getRawButton(4)){
 			cameras.changeCamera(CameraType.BACK);
 		}
-		
+		*/
 	}
 
 	public void testShooter() {
-		if (driveStick.getRawButton(7))
+		if (driveStick.getRawButton(5))
 			shooter.startWheels();
-		if (driveStick.getRawButton(8))
+		if (driveStick.getRawButton(6))
 			shooter.stopWheels();
 		if (driveStick.getRawButton(11))
 			shooter.startFeeder();
 		if (driveStick.getRawButton(12))
 			shooter.stopFeeder();
 	}
+	
 
 	public void testClimber() {
 		if (driveStick.getRawButton(10)) {
