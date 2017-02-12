@@ -2,6 +2,9 @@ package org.usfirst.frc.team3459.robot;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Shooter {
 	CANTalon wheelControl;
 	CANTalon feederControl;
@@ -12,9 +15,12 @@ public class Shooter {
 	}
 
 	public boolean startWheels() {
-		wheelControl.set(1.0); // TODO DONT KNOW WHAT SPEED IS NEEDED
+		double wheelSpeed = SmartDashboard.getNumber("Shooter Speed", 1.0);
+		SmartDashboard.putNumber("Shooter Speed", wheelSpeed);
+		wheelControl.set(wheelSpeed); 
 		return true;
 	}
+	
 
 	public boolean stopWheels() {
 		//System.out.println("hello");
