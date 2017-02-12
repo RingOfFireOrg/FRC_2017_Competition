@@ -95,6 +95,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("joystick", driveStick.getY());
+		SmartDashboard.putString("Motor Type", PTDrive.createController(5).getClass().getCanonicalName());
 		testShooter();
 		//testClimber();
 		//testPickerUpper();

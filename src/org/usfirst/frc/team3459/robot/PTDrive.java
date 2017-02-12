@@ -29,7 +29,7 @@ public class PTDrive extends RobotDrive {
 	    return new PTDrive(t_frontLeftMotor, t_rearLeftMotor, t_frontRightMotor, t_rearRightMotor);
 	}
 
-	private static SpeedController createController(final int motor) {
+	public static SpeedController createController(final int motor) {
 		DigitalInput input = new DigitalInput(9);
 		if (input.get()) {
 			return new Victor(motor);
