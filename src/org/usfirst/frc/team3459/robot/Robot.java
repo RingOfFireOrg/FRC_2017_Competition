@@ -24,6 +24,7 @@ public class Robot extends IterativeRobot {
 	UltrasonicSensor ultrasonicLeft = new UltrasonicSensor(RobotMap.ultrasonicLeft);
 	PTDrive driveTrain = new PTDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
 			RobotMap.rearRightMotor);
+	PTDrive.buildDrive(45);
 	Shooter shooter = new Shooter();
 	Climber climber = new Climber();
 	PickerUpper pickerupper = new PickerUpper();
