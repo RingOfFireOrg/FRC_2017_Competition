@@ -22,15 +22,17 @@ public class PTDrive extends RobotDrive {
 
 	public static PTDrive buildDrive(final int frontLeftMotor, final int rearLeftMotor, final int frontRightMotor,
 			final int rearRightMotor)	{
-		SpeedController t_rearLeftMotor = createController(rearLeftMotor);
-		SpeedController t_rearRightMotor = createController(rearRightMotor);
-		SpeedController t_frontLeftMotor = createController(frontLeftMotor);
-		SpeedController t_frontRightMotor = createController(frontRightMotor);
-	    return new PTDrive(t_frontLeftMotor, t_rearLeftMotor, t_frontRightMotor, t_rearRightMotor);
+		DigitalInput input = new DigitalInput(RobotMap.TestBotCartridge);
+
+		SpeedController t_rearLeftMotor = createController(rearLeftMotor, input);
+		SpeedController t_rearRightMotor = createController(rearRightMotor, input);
+		SpeedController t_frontLeftMotor = createController(frontLeftMotor, input);
+		SpeedController t_frontRightMotor = createController(frontRightMotor, input);
+		SmartDashboard.putString("Motor Type", t_rearLeftMotor.getClass().getCanonicalName());
+		return new PTDrive(t_frontLeftMotor, t_rearLeftMotor, t_frontRightMotor, t_rearRightMotor);
 	}
 
-	public static SpeedController createController(final int motor) {
-		DigitalInput input = new DigitalInput(9);
+	public static SpeedController createController(final int motor, DigitalInput input) {
 		if (input.get()) {
 			return new Victor(motor);
 		} else {

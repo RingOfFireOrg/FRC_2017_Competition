@@ -22,8 +22,7 @@ public class Robot extends IterativeRobot {
 	 */
 	UltrasonicSensor ultrasonicBack = new UltrasonicSensor(RobotMap.ultrasonicBack);
 	UltrasonicSensor ultrasonicLeft = new UltrasonicSensor(RobotMap.ultrasonicLeft);
-	PTDrive driveTrain = PTDrive.buildDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
-			RobotMap.rearRightMotor);
+	PTDrive driveTrain;
 	Shooter shooter = new Shooter();
 	Climber climber = new Climber();
 	PickerUpper pickerupper = new PickerUpper();
@@ -67,6 +66,9 @@ public class Robot extends IterativeRobot {
 		} catch (RuntimeException ex) {
 			DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
 		}
+		driveTrain = PTDrive.buildDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
+				RobotMap.rearRightMotor);
+		
 	}
 
 	/**
@@ -95,7 +97,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("joystick", driveStick.getY());
-		SmartDashboard.putString("Motor Type", PTDrive.createController(5).getClass().getCanonicalName());
 		testShooter();
 		//testClimber();
 		//testPickerUpper();

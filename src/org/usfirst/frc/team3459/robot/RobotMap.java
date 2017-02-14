@@ -31,4 +31,5 @@ public class RobotMap {
 	public static final int btnLowerLeft = 6;
 	public static final int btnLowerRight = 9;
 	public static final int btnUpperRight = 8;
+	public static final int TestBotCartridge = 9;
 }
