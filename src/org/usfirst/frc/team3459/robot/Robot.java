@@ -100,17 +100,17 @@ public class Robot extends IterativeRobot {
 		testShooter();
 		//testClimber();
 		//testPickerUpper();
-		/*if(driveStick.getRawButton(6)){
+		if(driveStick.getRawButton(7)){
 			cameras.changeCamera(CameraType.FRONT);
 		}
-		if(driveStick.getRawButton(4)){
+		if(driveStick.getRawButton(10)){
 			cameras.changeCamera(CameraType.BACK);
 		}
-		*/
+		
 	}
 
 	public void testShooter() {
-		if (driveStick.getRawButton(5))
+		if (driveStick.getRawButton(4))
 			shooter.startWheels();
 		if (driveStick.getRawButton(6))
 			shooter.stopWheels();
