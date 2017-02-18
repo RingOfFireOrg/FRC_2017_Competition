@@ -1,7 +1,9 @@
 package org.usfirst.frc.team3459.robot;
 
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSink;
 import edu.wpi.cscore.MjpegServer;
+import edu.wpi.first.wpilibj.CameraServer;
 
 public class Cameras {
 	public enum CameraType {
@@ -13,10 +15,17 @@ public class Cameras {
 	MjpegServer mjpegServer;
 
 	public Cameras() {
+        CameraServer cs = CameraServer.getInstance();  
 		fwdCamera = new UsbCamera("USB Camera 0", 0);
 		bkwdCamera = new UsbCamera("USB Camera 1", 1);
-		mjpegServer = new MjpegServer("serve_USB Camera 0", 1181);
+		cs.addCamera(fwdCamera);
+		cs.addCamera(bkwdCamera);
+		
+		mjpegServer = cs.addServer("serve_USB Camera 0");
+		
+	
 		mjpegServer.setSource(fwdCamera);
+
 	}
 
 	public boolean changeCamera(CameraType camera) {

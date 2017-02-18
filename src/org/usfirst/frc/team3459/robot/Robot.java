@@ -26,7 +26,7 @@ public class Robot extends IterativeRobot {
 	Shooter shooter = new Shooter();
 	Climber climber = new Climber();
 	PickerUpper pickerupper = new PickerUpper();
-	Cameras cameras = new Cameras();
+	Cameras cameras;
 
 	// operations
 
@@ -61,6 +61,7 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
+		cameras = new Cameras();
 		try {
 			ahrs = new AHRS(SerialPort.Port.kUSB);
 		} catch (RuntimeException ex) {
@@ -102,9 +103,11 @@ public class Robot extends IterativeRobot {
 		//testPickerUpper();
 		if(driveStick.getRawButton(7)){
 			cameras.changeCamera(CameraType.FRONT);
+			SmartDashboard.putString("camera", "front");
 		}
 		if(driveStick.getRawButton(10)){
 			cameras.changeCamera(CameraType.BACK);
+			SmartDashboard.putString("camera","back");
 		}
 		
 	}
