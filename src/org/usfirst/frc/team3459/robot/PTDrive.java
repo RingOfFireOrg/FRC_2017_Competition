@@ -8,12 +8,16 @@ import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PTDrive extends RobotDrive {
+	public enum DriveType {
+		ROBOT_RELATIVE_FRONT, ROBOT_RELATIVE_BACK, FIELD_RELATIVE
+	};
+
 	boolean rotateToAngle = false;
 	double targetAngle = 0.0f;
 	double kP = 0.02f;
 
-	public PTDrive(SpeedController frontLeftMotor, SpeedController rearLeftMotor,
-            SpeedController frontRightMotor, SpeedController rearRightMotor) {
+	public PTDrive(SpeedController frontLeftMotor, SpeedController rearLeftMotor, SpeedController frontRightMotor,
+			SpeedController rearRightMotor) {
 		super(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
 		setInvertedMotor(MotorType.kFrontRight, true);
 		setInvertedMotor(MotorType.kRearRight, true);
@@ -21,7 +25,7 @@ public class PTDrive extends RobotDrive {
 	}
 
 	public static PTDrive buildDrive(final int frontLeftMotor, final int rearLeftMotor, final int frontRightMotor,
-			final int rearRightMotor)	{
+			final int rearRightMotor) {
 		DigitalInput input = new DigitalInput(RobotMap.TestBotCartridge);
 
 		SpeedController t_rearLeftMotor = createController(rearLeftMotor, input);
@@ -40,7 +44,7 @@ public class PTDrive extends RobotDrive {
 		}
 
 	}
-	
+
 	public void turnToAngle(double angle) {
 		rotateToAngle = true;
 		targetAngle = angle;
@@ -52,24 +56,54 @@ public class PTDrive extends RobotDrive {
 
 	private double getDeltaAngle(double targetAngle, double currentAngle) {
 		double deltaAngle = targetAngle - currentAngle;
-		if (deltaAngle > 180){
+		if (deltaAngle > 180) {
 			deltaAngle = deltaAngle - 360;
 		}
-		if (deltaAngle < -180){
+		if (deltaAngle < -180) {
 			deltaAngle = deltaAngle + 360;
 		}
 		return deltaAngle;
 	}
 
-	void drive(double x, double y, double twist, double currentAngle) {
+	private double getSpeed(double deltaAngle) {
+		double scale = 0.3;
+		double offset = 0.2;
+		return (((deltaAngle / 180.0) * scale) + offset);
+	}
+
+	private void internalDrive(double x, double y, double twist, double currentAngle, DriveType driveType) {
+		switch (driveType) {
+		case ROBOT_RELATIVE_FRONT:
+			mecanumDrive_Cartesian(x, y, twist, 0.0);
+			SmartDashboard.putString("driveMode", "robot relative front");
+			break;
+
+		case ROBOT_RELATIVE_BACK:
+			mecanumDrive_Cartesian(x, y, twist, 180.0);
+			SmartDashboard.putString("driveMode", "robot relative back");
+			break;
+		case FIELD_RELATIVE:
+		default:
+			mecanumDrive_Cartesian(x, y, twist, currentAngle);
+			SmartDashboard.putString("driveMode", "Field relative ");
+			break;
+
+		}
+	}
+
+	void drive(double x, double y, double twist, double currentAngle, DriveType driveType) {
 		if (rotateToAngle) {
+			// SmartDashboard.putNumber("targetAngle", targetAngle);
+			// SmartDashboard.putNumber("currentAngle", currentAngle);
 			double deltaAngle = getDeltaAngle(targetAngle, currentAngle);
-			mecanumDrive_Cartesian(x, y, kP * deltaAngle, currentAngle);
+			// SmartDashboard.putNumber("deltaAngle", deltaAngle);
+			// SmartDashboard.putNumber("Speed", getSpeed(deltaAngle));
+			internalDrive(x, y, getSpeed(deltaAngle), currentAngle, driveType);
 			if (Math.abs(deltaAngle) < 1.0) {
 				stopTurnToAngle();
 			}
 		} else {
-			mecanumDrive_Cartesian(x, y, twist, currentAngle);
+			internalDrive(x, y, twist, currentAngle, driveType);
 		}
 	}
 }

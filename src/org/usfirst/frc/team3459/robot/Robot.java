@@ -16,9 +16,6 @@ import edu.wpi.first.wpilibj.SerialPort;
  * "Robot")
  */
 public class Robot extends IterativeRobot {
-	public enum DriveType {
-		ROBOT_RELATIVE_FRONT, ROBOT_RELATIVE_BACK, FIELD_RELATIVE
-	};
 
 	/*
 	 * Member variables go here
@@ -31,7 +28,7 @@ public class Robot extends IterativeRobot {
 	Climber climber = new Climber();
 	PickerUpper pickerupper = new PickerUpper();
 	Cameras cameras;
-	DriveType driveType = DriveType.ROBOT_RELATIVE_FRONT;
+	PTDrive.DriveType driveType = PTDrive.DriveType.ROBOT_RELATIVE_FRONT;
 	// operations
 
 	AHRS ahrs;
@@ -102,42 +99,28 @@ public class Robot extends IterativeRobot {
 			driveTrain.stopTurnToAngle();
 		}
 		if (driveStick.getRawButton(7))
-			driveType = DriveType.ROBOT_RELATIVE_FRONT;
+			driveType = PTDrive.DriveType.ROBOT_RELATIVE_FRONT;
 		if (driveStick.getRawButton(8))
-			driveType = DriveType.FIELD_RELATIVE;
+			driveType = PTDrive.DriveType.FIELD_RELATIVE;
 
+		if(driveStick.getRawButton(11))
+			driveTrain.turnToAngle(30.0);
+		
 		double x = speedInput(driveStick.getX(), driveStick.getTrigger());
 		double y = speedInput(driveStick.getY(), driveStick.getTrigger());
 		double twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
 		if (driveStick.getRawButton(4)) {
-			driveTrain.drive(x, y, twist, 180.0);
-			SmartDashboard.putString("driveMode", "robot relitve back");
+			driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_BACK);
+			cameras.changeCamera(CameraType.BACK);
 		} else {
-
-			switch (driveType) {
-			case ROBOT_RELATIVE_FRONT:
-				driveTrain.drive(x, y, twist, 0.0);
-				SmartDashboard.putString("driveMode", "robot relitve front");
-				break;
-
-			case ROBOT_RELATIVE_BACK:
-				driveTrain.drive(x, y, twist, 180.0);
-				SmartDashboard.putString("driveMode", "robot relitve back");
-				break;
-			case FIELD_RELATIVE:
-			default:
-				driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()));
-				SmartDashboard.putString("driveMode", "Field relative ");
-				break;
-
-			}
+			driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), driveType);
 		}
 		SmartDashboard.putNumber("distance left", ultrasonicLeft.getDistance());
 		SmartDashboard.putNumber("distance right", ultrasonicRight.getDistance());
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
-		SmartDashboard.putNumber("joystick", driveStick.getY());
-		//testShooter();
+
+		// testShooter();
 		// testClimber();
 		// testPickerUpper();
 		if (driveStick.getRawButton(5)) {
@@ -146,6 +129,8 @@ public class Robot extends IterativeRobot {
 		if (driveStick.getRawButton(6)) {
 			cameras.changeCamera(CameraType.BACK);
 		}
+		
+		
 
 	}
 
@@ -198,12 +183,9 @@ public class Robot extends IterativeRobot {
 
 	public void auto_driveForward() {
 		if (ultrasonicBack.getDistance() > 100.0) {
-			driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()));// these
-																				// numbers
-																				// need
-																				// changing
+			driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 		} else {
-			driveTrain.drive(0.0, 0.0, 0.0, 0.0);
+			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
 		}
 	}
 
