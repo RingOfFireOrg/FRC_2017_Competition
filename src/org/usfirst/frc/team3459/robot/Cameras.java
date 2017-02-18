@@ -4,6 +4,7 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Cameras {
 	public enum CameraType {
@@ -21,21 +22,20 @@ public class Cameras {
 		cs.addCamera(fwdCamera);
 		cs.addCamera(bkwdCamera);
 		
-		mjpegServer = cs.addServer("serve_USB Camera 0");
-		
-	
+		mjpegServer = cs.addServer("serve_USB Camera 0");	
 		mjpegServer.setSource(fwdCamera);
-
 	}
 
 	public boolean changeCamera(CameraType camera) {
 		switch (camera) {
 		case FRONT:
 			mjpegServer.setSource(fwdCamera);
+			SmartDashboard.putString("camera", "front");
 			break;
 
 		case BACK:
 			mjpegServer.setSource(bkwdCamera);
+			SmartDashboard.putString("camera", "back");
 			break;
 		default:
 			return false;

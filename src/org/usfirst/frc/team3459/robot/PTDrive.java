@@ -64,8 +64,6 @@ public class PTDrive extends RobotDrive {
 	void drive(double x, double y, double twist, double currentAngle) {
 		if (rotateToAngle) {
 			double deltaAngle = getDeltaAngle(targetAngle, currentAngle);
-			SmartDashboard.putNumber("targetAngle", targetAngle);
-			SmartDashboard.putNumber("currentAngle", currentAngle);
 			mecanumDrive_Cartesian(x, y, kP * deltaAngle, currentAngle);
 			if (Math.abs(deltaAngle) < 1.0) {
 				stopTurnToAngle();

@@ -21,6 +21,8 @@ public class RobotMap {
 	// analog ports
 	public static final int ultrasonicBack = 0;
 	public static final int ultrasonicLeft = 1;
+	public static final int ultrasonicRight = 2;
+
 
 	// control panel
 	public static final int selector_1 = 1;

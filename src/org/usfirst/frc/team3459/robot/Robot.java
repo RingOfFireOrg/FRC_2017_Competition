@@ -25,6 +25,7 @@ public class Robot extends IterativeRobot {
 	 */
 	UltrasonicSensor ultrasonicBack = new UltrasonicSensor(RobotMap.ultrasonicBack);
 	UltrasonicSensor ultrasonicLeft = new UltrasonicSensor(RobotMap.ultrasonicLeft);
+	UltrasonicSensor ultrasonicRight = new UltrasonicSensor(RobotMap.ultrasonicRight);
 	PTDrive driveTrain;
 	Shooter shooter = new Shooter();
 	Climber climber = new Climber();
@@ -110,37 +111,40 @@ public class Robot extends IterativeRobot {
 		double twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
 		if (driveStick.getRawButton(4)) {
 			driveTrain.drive(x, y, twist, 180.0);
+			SmartDashboard.putString("driveMode", "robot relitve back");
 		} else {
 
 			switch (driveType) {
 			case ROBOT_RELATIVE_FRONT:
 				driveTrain.drive(x, y, twist, 0.0);
+				SmartDashboard.putString("driveMode", "robot relitve front");
 				break;
 
 			case ROBOT_RELATIVE_BACK:
 				driveTrain.drive(x, y, twist, 180.0);
+				SmartDashboard.putString("driveMode", "robot relitve back");
 				break;
 			case FIELD_RELATIVE:
 			default:
 				driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()));
+				SmartDashboard.putString("driveMode", "Field relative ");
 				break;
 
 			}
 		}
 		SmartDashboard.putNumber("distance left", ultrasonicLeft.getDistance());
+		SmartDashboard.putNumber("distance right", ultrasonicRight.getDistance());
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("joystick", driveStick.getY());
-		testShooter();
+		//testShooter();
 		// testClimber();
 		// testPickerUpper();
 		if (driveStick.getRawButton(5)) {
 			cameras.changeCamera(CameraType.FRONT);
-			SmartDashboard.putString("camera", "front");
 		}
 		if (driveStick.getRawButton(6)) {
 			cameras.changeCamera(CameraType.BACK);
-			SmartDashboard.putString("camera", "back");
 		}
 
 	}
