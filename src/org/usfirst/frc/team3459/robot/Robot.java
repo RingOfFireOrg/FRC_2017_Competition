@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj.SerialPort;
  * "Robot")
  */
 public class Robot extends IterativeRobot {
+	public enum DriveType {
+		ROBOT_RELATIVE_FRONT, ROBOT_RELATIVE_BACK, FIELD_RELATIVE
+	};
 
 	/*
 	 * Member variables go here
@@ -27,7 +30,7 @@ public class Robot extends IterativeRobot {
 	Climber climber = new Climber();
 	PickerUpper pickerupper = new PickerUpper();
 	Cameras cameras;
-
+	DriveType driveType = DriveType.ROBOT_RELATIVE_FRONT;
 	// operations
 
 	AHRS ahrs;
@@ -36,9 +39,10 @@ public class Robot extends IterativeRobot {
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
 
-	public double speedInput(double input) {
+	public double speedInput(double input, boolean slow) {
 		double output;
-
+		if (slow)
+			input = input / 2;
 		output = input * input;
 		if (input < 0.0)
 			output = output * -1.0;
@@ -69,7 +73,7 @@ public class Robot extends IterativeRobot {
 		}
 		driveTrain = PTDrive.buildDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
 				RobotMap.rearRightMotor);
-		
+
 	}
 
 	/**
@@ -91,25 +95,54 @@ public class Robot extends IterativeRobot {
 				targetAngle = pov - 360;
 			}
 			driveTrain.turnToAngle(targetAngle);
+
 		}
-		driveTrain.drive(speedInput(driveStick.getX()), speedInput(driveStick.getY()),
-				speedInput(driveStick.getTwist()), normalizeAngle(ahrs.getAngle()));
+		if (driveStick.getRawButton(2)) {
+			driveTrain.stopTurnToAngle();
+		}
+		if (driveStick.getRawButton(7))
+			driveType = DriveType.ROBOT_RELATIVE_FRONT;
+		if (driveStick.getRawButton(8))
+			driveType = DriveType.FIELD_RELATIVE;
+
+		double x = speedInput(driveStick.getX(), driveStick.getTrigger());
+		double y = speedInput(driveStick.getY(), driveStick.getTrigger());
+		double twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
+		if (driveStick.getRawButton(4)) {
+			driveTrain.drive(x, y, twist, 180.0);
+		} else {
+
+			switch (driveType) {
+			case ROBOT_RELATIVE_FRONT:
+				driveTrain.drive(x, y, twist, 0.0);
+				break;
+
+			case ROBOT_RELATIVE_BACK:
+				driveTrain.drive(x, y, twist, 180.0);
+				break;
+			case FIELD_RELATIVE:
+			default:
+				driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()));
+				break;
+
+			}
+		}
 		SmartDashboard.putNumber("distance left", ultrasonicLeft.getDistance());
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("joystick", driveStick.getY());
 		testShooter();
-		//testClimber();
-		//testPickerUpper();
-		if(driveStick.getRawButton(7)){
+		// testClimber();
+		// testPickerUpper();
+		if (driveStick.getRawButton(5)) {
 			cameras.changeCamera(CameraType.FRONT);
 			SmartDashboard.putString("camera", "front");
 		}
-		if(driveStick.getRawButton(10)){
+		if (driveStick.getRawButton(6)) {
 			cameras.changeCamera(CameraType.BACK);
-			SmartDashboard.putString("camera","back");
+			SmartDashboard.putString("camera", "back");
 		}
-		
+
 	}
 
 	public void testShooter() {
@@ -122,7 +155,6 @@ public class Robot extends IterativeRobot {
 		if (driveStick.getRawButton(12))
 			shooter.stopFeeder();
 	}
-	
 
 	public void testClimber() {
 		if (driveStick.getRawButton(10)) {
@@ -132,12 +164,12 @@ public class Robot extends IterativeRobot {
 			climber.stopClimber();
 		}
 	}
-	
-	public void testPickerUpper(){
-		if (driveStick.getRawButton(5)){
+
+	public void testPickerUpper() {
+		if (driveStick.getRawButton(5)) {
 			pickerupper.startPickup();
 		}
-		if (driveStick.getRawButton(3)){
+		if (driveStick.getRawButton(3)) {
 			pickerupper.stopPickup();
 		}
 	}
