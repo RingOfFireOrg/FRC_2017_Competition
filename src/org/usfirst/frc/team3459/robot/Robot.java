@@ -36,6 +36,7 @@ public class Robot extends IterativeRobot {
 	// Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
+	TurnToAngleController angleButtons = new TurnToAngleController(RobotMap.turnToAngleController);
 
 	public double speedInput(double input, boolean slow) {
 		double output;
@@ -86,7 +87,7 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void teleopPeriodic() {
-		int pov = driveStick.getPOV();
+		int pov = angleButtons.getPOV();
 		if (pov != -1) {
 			double targetAngle = pov;
 			if (pov > 180) {

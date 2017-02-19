@@ -17,6 +17,7 @@ public class RobotMap {
 	// public static int rightStick = 2; not currently used
 	public static final int driveStick = 0;
 	public static final int controlPanel = 1;
+	public static final int turnToAngleController = 2;
 
 	// analog ports
 	public static final int ultrasonicBack = 0;
