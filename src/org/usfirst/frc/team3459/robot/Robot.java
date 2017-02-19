@@ -169,8 +169,35 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void autonomousPeriodic() {
-		auto_driveForward();
+		switch (controlPanel.getProgram()) {
+		case 1:
+			auto_driveForward();
+			break;
+		case 2:
+			auto_depositGear();
+			break;
+		case 3:
+			auto_depositGear3();
+			break;
+		case 4:
+			auto_shoot();
+			break;
+		default:
+			auto_driveForward();
+			break;		
+		}
+	}
 
+	public void auto_depositGear() {
+		// TODO
+	}
+
+	public void auto_depositGear3() {
+		// TODO
+	}
+
+	public void auto_shoot() {
+		// TODO
 	}
 
 	public void auto_driveForward() {
