@@ -22,21 +22,21 @@ public class ControlPanel extends Joystick {
 		}
 		return result;
 	}
-	public boolean getUpperLeft()
+	public boolean getShooter()
 	{
-		return this.getRawButton(RobotMap.btnUpperLeft);
+		return this.getRawButton(RobotMap.btnShooter);
 	}
-	public boolean getUpperRight()
+	public boolean getClimber()
 	{
-		return this.getRawButton(RobotMap.btnUpperRight);
+		return this.getRawButton(RobotMap.btnClimber);
 	}
-	public boolean getLowerLeft()
+	public boolean getPickerUpper()
 	{
-		return this.getRawButton(RobotMap.btnLowerLeft);
+		return this.getRawButton(RobotMap.btnPickupper);
 	}
-	public boolean getLowerRight()
+	public boolean getEmergencyReverse()
 	{
-		return this.getRawButton(RobotMap.btnLowerRight);
+		return this.getRawButton(RobotMap.btnEmergencyReverse);
 	}
 
 }

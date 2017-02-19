@@ -2,7 +2,6 @@ package org.usfirst.frc.team3459.robot;
 
 import com.ctre.CANTalon;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter {
@@ -15,7 +14,7 @@ public class Shooter {
 	}
 
 	public boolean startWheels() {
-		double wheelSpeed = SmartDashboard.getNumber("Shooter Speed", 1.0);
+		double wheelSpeed = SmartDashboard.getNumber("Shooter Speed", 0.47);  //TODO: Needs to be changed
 		SmartDashboard.putNumber("Shooter Speed", wheelSpeed);
 		wheelControl.set(wheelSpeed); 
 		return true;

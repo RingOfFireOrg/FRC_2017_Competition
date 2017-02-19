@@ -22,16 +22,19 @@ public class RobotMap {
 	public static final int ultrasonicBack = 0;
 	public static final int ultrasonicLeft = 1;
 	public static final int ultrasonicRight = 2;
+	
+	// digital io
+	public static final int TestBotCartridge=9;
 
 
 	// control panel
 	public static final int selector_1 = 1;
 	public static final int selector_2 = 2;
 	public static final int selector_3 = 3;
-
-	public static final int btnUpperLeft = 7;
-	public static final int btnLowerLeft = 6;
-	public static final int btnLowerRight = 9;
-	public static final int btnUpperRight = 8;
-	public static final int TestBotCartridge = 9;
+	
+	public static final int btnShooter=4;
+	public static final int btnClimber=5;
+	public static final int btnPickupper=6;
+	public static final int btnEmergencyReverse=17;
+	
 }

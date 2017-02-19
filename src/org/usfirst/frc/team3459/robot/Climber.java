@@ -8,12 +8,16 @@ public class Climber {
 		climbControl = new CANTalon(RobotMap.climberMotor);
 	}
 
-	public boolean startClimber() {
+	public boolean start() {
 		climbControl.set(1.0); // TODO DONT KNOW WHAT SPEED IS NEEDED
 		return true;
 	}
-	public boolean stopClimber(){
+	public boolean stop(){
 		climbControl.set(0.0);
+		return true;
+	}
+	public boolean reverse(){
+		climbControl.set(-1.0);
 		return true;
 	}
 }

@@ -103,9 +103,9 @@ public class Robot extends IterativeRobot {
 		if (driveStick.getRawButton(8))
 			driveType = PTDrive.DriveType.FIELD_RELATIVE;
 
-		if(driveStick.getRawButton(11))
+		if (driveStick.getRawButton(11))
 			driveTrain.turnToAngle(30.0);
-		
+
 		double x = speedInput(driveStick.getX(), driveStick.getTrigger());
 		double y = speedInput(driveStick.getY(), driveStick.getTrigger());
 		double twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
@@ -120,46 +120,38 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 
-		// testShooter();
-		// testClimber();
-		// testPickerUpper();
 		if (driveStick.getRawButton(5)) {
 			cameras.changeCamera(CameraType.FRONT);
 		}
 		if (driveStick.getRawButton(6)) {
 			cameras.changeCamera(CameraType.BACK);
 		}
-		
-		
-
-	}
-
-	public void testShooter() {
-		if (driveStick.getRawButton(4))
-			shooter.startWheels();
-		if (driveStick.getRawButton(6))
-			shooter.stopWheels();
-		if (driveStick.getRawButton(11))
+		// manipulator
+		if (controlPanel.getShooter()) {
 			shooter.startFeeder();
-		if (driveStick.getRawButton(12))
-			shooter.stopFeeder();
-	}
-
-	public void testClimber() {
-		if (driveStick.getRawButton(10)) {
-			climber.startClimber();
-
+			shooter.startWheels();
 		} else {
-			climber.stopClimber();
+			shooter.stopFeeder();
+			shooter.stopWheels();
 		}
-	}
 
-	public void testPickerUpper() {
-		if (driveStick.getRawButton(5)) {
-			pickerupper.startPickup();
+		if (controlPanel.getClimber()) {
+			if (controlPanel.getEmergencyReverse()) {
+				climber.reverse();
+			} else {
+				climber.start();
+			}
+		} else {
+			climber.stop();
 		}
-		if (driveStick.getRawButton(3)) {
-			pickerupper.stopPickup();
+		if (controlPanel.getPickerUpper()) {
+			if (controlPanel.getEmergencyReverse()) {
+				pickerupper.reverse();
+			} else {
+				pickerupper.start();
+			}
+		} else {
+			pickerupper.stop();
 		}
 	}
 

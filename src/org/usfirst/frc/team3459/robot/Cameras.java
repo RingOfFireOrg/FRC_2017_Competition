@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3459.robot;
 
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoSink;
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
