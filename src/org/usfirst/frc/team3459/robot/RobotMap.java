@@ -34,8 +34,8 @@ public class RobotMap {
 	public static final int selector_3 = 3;
 	
 	public static final int btnShooter=4;
-	public static final int btnClimber=5;
+	public static final int btnClimber=8;
 	public static final int btnPickupper=6;
-	public static final int btnEmergencyReverse=17;
+	public static final int btnEmergencyReverse=7;
 	
 }

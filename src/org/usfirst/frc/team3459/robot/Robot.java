@@ -1,15 +1,15 @@
 package org.usfirst.frc.team3459.robot;
 
+import org.usfirst.frc.team3459.robot.Cameras.CameraType;
+
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import org.usfirst.frc.team3459.robot.Cameras.CameraType;
-
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SerialPort;
 
 /**
  * Don't change the name of this or it won't work. (The manifest looks for
@@ -48,7 +48,7 @@ public class Robot extends IterativeRobot {
 		return output;
 	}
 
-	public double normalizeAngle(double input) {
+	public static double normalizeAngle(double input) {
 		double output = input;
 		while (output > 180) {
 			output = output - 360;
@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		cameras = new Cameras();
 		try {
-			ahrs = new AHRS(SerialPort.Port.kUSB);
+			ahrs = new AHRS(I2C.Port.kOnboard);
 		} catch (RuntimeException ex) {
 			DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
 		}
@@ -88,13 +88,9 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		int pov = angleButtons.getPOV();
+		
 		if (pov != -1) {
-			double targetAngle = pov;
-			if (pov > 180) {
-				targetAngle = pov - 360;
-			}
-			driveTrain.turnToAngle(targetAngle);
-
+			driveTrain.turnToAngle(normalizeAngle(pov));
 		}
 		if (driveStick.getRawButton(2)) {
 			driveTrain.stopTurnToAngle();
@@ -120,6 +116,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("distance right", ultrasonicRight.getDistance());
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
+		SmartDashboard.putNumber("rawangle", ahrs.getAngle());
+		SmartDashboard.putNumber("targetangle", normalizeAngle(pov));
 
 		if (driveStick.getRawButton(5)) {
 			cameras.changeCamera(CameraType.FRONT);

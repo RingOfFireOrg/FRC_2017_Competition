@@ -55,19 +55,12 @@ public class PTDrive extends RobotDrive {
 	}
 
 	private double getDeltaAngle(double targetAngle, double currentAngle) {
-		double deltaAngle = targetAngle - currentAngle;
-		if (deltaAngle > 180) {
-			deltaAngle = deltaAngle - 360;
-		}
-		if (deltaAngle < -180) {
-			deltaAngle = deltaAngle + 360;
-		}
-		return deltaAngle;
+		return Robot.normalizeAngle(targetAngle - currentAngle);
 	}
 
 	private double getSpeed(double deltaAngle) {
 		double scale = 0.3;
-		double offset = 0.2;
+		double offset = (deltaAngle < 0) ? -0.2 : 0.2;
 		return (((deltaAngle / 180.0) * scale) + offset);
 	}
 
@@ -78,7 +71,7 @@ public class PTDrive extends RobotDrive {
 			SmartDashboard.putString("driveMode", "robot relative front");
 			break;
 
-		case ROBOT_RELATIVE_BACK:
+		case ROBOT_RELATIVE_BACK:	
 			mecanumDrive_Cartesian(x, y, twist, 180.0);
 			SmartDashboard.putString("driveMode", "robot relative back");
 			break;
@@ -93,13 +86,14 @@ public class PTDrive extends RobotDrive {
 
 	void drive(double x, double y, double twist, double currentAngle, DriveType driveType) {
 		if (rotateToAngle) {
-			// SmartDashboard.putNumber("targetAngle", targetAngle);
-			// SmartDashboard.putNumber("currentAngle", currentAngle);
+			SmartDashboard.putNumber("targetAngle", targetAngle);
+			SmartDashboard.putNumber("currentAngle", currentAngle);
 			double deltaAngle = getDeltaAngle(targetAngle, currentAngle);
-			// SmartDashboard.putNumber("deltaAngle", deltaAngle);
-			// SmartDashboard.putNumber("Speed", getSpeed(deltaAngle));
+			SmartDashboard.putNumber("deltaAngle", deltaAngle);
+			SmartDashboard.putNumber("Speed", getSpeed(deltaAngle));
 			internalDrive(x, y, getSpeed(deltaAngle), currentAngle, driveType);
 			if (Math.abs(deltaAngle) < 1.0) {
+				SmartDashboard.putString("diag", "Stopped going to " + targetAngle + " Due to " + deltaAngle);
 				stopTurnToAngle();
 			}
 		} else {
