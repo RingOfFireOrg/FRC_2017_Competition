@@ -60,7 +60,10 @@ public class PTDrive extends RobotDrive {
 
 	private double getSpeed(double deltaAngle) {
 		double scale = 0.3;
-		double offset = (deltaAngle < 0) ? -0.2 : 0.2;
+		double offset = 0.2;
+		if (deltaAngle < 0.0){
+			offset = offset * -1;
+		}
 		return (((deltaAngle / 180.0) * scale) + offset);
 	}
 
