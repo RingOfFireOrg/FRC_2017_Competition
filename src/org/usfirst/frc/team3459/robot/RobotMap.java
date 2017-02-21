@@ -6,14 +6,25 @@ public class RobotMap {
 	public static final int frontRightMotor = 1;
 	public static final int rearLeftMotor = 2;
 	public static final int rearRightMotor = 3;
-	// CAN INSTEAD OF PWM
+	// CAN INSTEAD OF PWM  // probably all of these numbers are not quite correct (CAN)
 	public static final int shooterMotor = 4;
-	public static final int pickupMotor = 5;
-	public static final int feederMotor = 6; //also feeder is a bad name, what does that mean?
-	public static final int climberMotor = 7; // this number is wrong, climber might run on two diff motor signals
+	public static final int pickupMotor = 5; 
+	public static final int feederMotor = 9; //also feeder is a bad name, what does that mean?
+	public static final int climberMotor1 = 7; // 
+	public static final int climberMotor2 = 6; // 
 	
-// there are 6 motors  on can, on the robot I have hopper motors on ID 7 and 8
-	// there are 4 other motor controllers, 
+	/*
+	
+	I have a Talon on ID 6 which should be for one of the climber motors, it has no code telling it to move
+    I have a Talon on ID 7 which should be for one of the climber motors, it has no code telling it to move
+	I have a Talon on ID 8 which should be for one of the hopper motors, it has no code telling it to move
+	I have a Talon on ID 9 which should be for one of the hopper motors, it has no code telling it to move
+	
+	button four runs Talon ID 4, which is/was what the shooterMoter set to
+	button six runs Talon ID 5, which is/was what the PickupMotor was set to
+	
+	
+	*/
 	
 	// Joysticks
 	// public static int leftStick = 1; not currently used
@@ -39,6 +50,6 @@ public class RobotMap {
 	public static final int btnShooter=4;
 	public static final int btnClimber=8;
 	public static final int btnPickupper=6;
-	public static final int btnEmergencyReverse=7;
+	public static final int btnEmergencyReverse=7; // btw this doesn't work in conjuction with running the btnShooter
 	
 }

@@ -2,6 +2,7 @@ package org.usfirst.frc.team3459.robot;
 
 import org.usfirst.frc.team3459.robot.Cameras.CameraType;
 
+import com.ctre.CANTalon;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -38,6 +39,11 @@ public class Robot extends IterativeRobot {
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
 	TurnToAngleController angleButtons = new TurnToAngleController(RobotMap.turnToAngleController);
 
+	// TESTING STUFF
+	CANTalon testTalon6 = new CANTalon(6);	
+	CANTalon testTalon8 = new CANTalon(8);
+	// TESTING STUFF
+	
 	public double speedInput(double input, boolean slow) {
 		double output;
 		if (slow)
