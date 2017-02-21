@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 	Climber climber = new Climber();
 	PickerUpper pickerupper = new PickerUpper();
 	Cameras cameras;
-	PTDrive.DriveType driveType = PTDrive.DriveType.ROBOT_RELATIVE_FRONT;
+	PTDrive.DriveType driveType = PTDrive.DriveType.FIELD_RELATIVE;
 	// operations
 
 	AHRS ahrs;
