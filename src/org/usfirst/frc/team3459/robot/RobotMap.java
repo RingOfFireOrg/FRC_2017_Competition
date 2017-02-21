@@ -7,11 +7,14 @@ public class RobotMap {
 	public static final int rearLeftMotor = 2;
 	public static final int rearRightMotor = 3;
 	// CAN INSTEAD OF PWM
-	public static final int shooterMotor = 14;
-	public static final int feederMotor = 1;
-	public static final int climberMotor = 3;
-	public static final int pickupMotor = 2;
-
+	public static final int shooterMotor = 4;
+	public static final int pickupMotor = 5;
+	public static final int feederMotor = 6; //also feeder is a bad name, what does that mean?
+	public static final int climberMotor = 7; // this number is wrong, climber might run on two diff motor signals
+	
+// there are 6 motors  on can, on the robot I have hopper motors on ID 7 and 8
+	// there are 4 other motor controllers, 
+	
 	// Joysticks
 	// public static int leftStick = 1; not currently used
 	// public static int rightStick = 2; not currently used
