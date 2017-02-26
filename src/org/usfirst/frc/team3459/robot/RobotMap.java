@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3459.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
+
 public class RobotMap {
 	// motors
 	public static final int frontLeftMotor = 0;
@@ -30,9 +32,24 @@ public class RobotMap {
 	// public static int leftStick = 1; not currently used
 	// public static int rightStick = 2; not currently used
 	public static final int driveStick = 0;
+	public static final int xBoxController = 3;
 	public static final int controlPanel = 1;
 	public static final int turnToAngleController = 2;
+	
+	// axis numbers for xbox controller
+	// xbc = xboxcontroller
+	
+	
+	static class XBox {
+	   public static final int leftStickX=1, leftStickY=2, rightStickX=4, rightStickY=5;
 
+	   public static double getDirection(Joystick xBoxController){
+			return Math.toDegrees(Math.atan2(xBoxController.getRawAxis(rightStickX), xBoxController.getRawAxis(rightStickY)));
+		}
+	}
+
+	
+	
 	// analog ports
 	public static final int ultrasonicBack = 0;
 	public static final int ultrasonicLeft = 1;

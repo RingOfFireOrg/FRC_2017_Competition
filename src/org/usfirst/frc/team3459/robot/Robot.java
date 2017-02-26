@@ -36,14 +36,15 @@ public class Robot extends IterativeRobot {
 	// Joystick leftStick = new Joystick(RobotMap.leftStick);
 	// Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
+	XBoxController xbc = new XBoxController(RobotMap.xBoxController);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
 	TurnToAngleController angleButtons = new TurnToAngleController(RobotMap.turnToAngleController);
 
 	// TESTING STUFF
-	CANTalon testTalon6 = new CANTalon(6);	
+	CANTalon testTalon6 = new CANTalon(6);
 	CANTalon testTalon8 = new CANTalon(8);
 	// TESTING STUFF
-	
+
 	public double speedInput(double input, boolean slow) {
 		double output;
 		if (slow)
@@ -94,10 +95,17 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		int pov = angleButtons.getPOV();
-		
+
 		if (pov != -1) {
 			driveTrain.turnToAngle(normalizeAngle(pov));
 		}
+
+		// testing stuff
+
+		// driveTrain.turnToAngle(xbc.getDirection());
+
+		// testing stuff
+
 		if (driveStick.getRawButton(2)) {
 			driveTrain.stopTurnToAngle();
 		}
@@ -189,7 +197,7 @@ public class Robot extends IterativeRobot {
 			break;
 		default:
 			auto_driveForward();
-			break;		
+			break;
 		}
 	}
 
