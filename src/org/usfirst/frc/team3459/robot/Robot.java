@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -30,6 +31,8 @@ public class Robot extends IterativeRobot {
 	PickerUpper pickerupper = new PickerUpper();
 	Cameras cameras;
 	PTDrive.DriveType driveType = PTDrive.DriveType.FIELD_RELATIVE;
+	int autoStep = 1;
+	Timer autoTimer;
 	// operations
 
 	AHRS ahrs;
@@ -175,6 +178,7 @@ public class Robot extends IterativeRobot {
 		ahrs.reset();
 		int selector = controlPanel.getProgram();
 		SmartDashboard.putNumber("Autonomous Program", selector);
+		autoStep = 1;
 	}
 
 	/**
@@ -182,6 +186,7 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void autonomousPeriodic() {
+		DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
 		switch (controlPanel.getProgram()) {
 		case 1:
 			auto_driveForward();
@@ -190,7 +195,7 @@ public class Robot extends IterativeRobot {
 			auto_depositGear();
 			break;
 		case 3:
-			auto_depositGear3();
+			auto_depositGear3(alliance);
 			break;
 		case 4:
 			auto_shoot();
@@ -205,7 +210,43 @@ public class Robot extends IterativeRobot {
 		// TODO
 	}
 
-	public void auto_depositGear3() {
+	public void auto_depositGear3(DriverStation.Alliance myAlliance) {
+		final int kDriveDistance = 100; // TODO: We know this is wrong
+
+		switch (myAlliance) {
+		case Red:
+			switch (autoStep) {
+			case 1:
+				if (ultrasonicBack.getDistance() < kDriveDistance) {
+					driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+				} else {
+					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+					autoStep = 2;
+				}
+				break;
+			case 2:
+				if (normalizeAngle(ahrs.getAngle()) < 30) {
+					driveTrain.drive(0.0, 0.0, 0.5, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+				} else {
+					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+					autoStep = 3;
+					autoTimer.reset();
+					autoTimer.start();
+				}
+				break;
+			case 3:
+				if (autoTimer.get() < 5.0) {
+					driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_BACK);
+				} else {
+					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+					autoStep = 4;
+				}
+				break;
+			case 4:	
+			}
+		case Blue:
+			break;
+		}
 		// TODO
 	}
 
