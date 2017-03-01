@@ -181,24 +181,24 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void autonomousPeriodic() {
-		DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
-		switch (controlPanel.getProgram()) {
-		case 1:
-			auto_driveForward();
-			break;
-		case 2:
-			auto_depositGear();
-			break;
-		case 3:
-			auto_depositGear3(alliance);
-			break;
-		case 4:
-			auto_shoot();
-			break;
-		default:
-			auto_driveForward();
-			break;
-		}
+//		DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
+//		switch (controlPanel.getProgram()) {
+//		case 1:
+//			auto_driveForward();
+//			break;
+//		case 2:
+//			auto_depositGear();
+//			break;
+//		case 3:
+//			auto_depositGear3(alliance);
+//			break;
+//		case 4:
+//			auto_shoot();
+//			break;
+//		default:
+//			auto_driveForward();
+//			break;
+//		}
 	}
 
 	public void auto_depositGear() {
