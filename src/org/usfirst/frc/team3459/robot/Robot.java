@@ -43,7 +43,6 @@ public class Robot extends IterativeRobot {
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
 	TurnToAngleController angleButtons = new TurnToAngleController(RobotMap.turnToAngleController);
 
-
 	public double speedInput(double input, boolean slow) {
 		double output;
 		if (slow)
@@ -221,30 +220,69 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 			case 2:
+//				if (ultrasonicRight.getDistance() )
+				break;
+			case 3:
 				if (normalizeAngle(ahrs.getAngle()) < 30) {
 					driveTrain.drive(0.0, 0.0, 0.5, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 				} else {
 					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-					autoStep = 3;
+					autoStep = 4;
 					autoTimer.reset();
 					autoTimer.start();
 				}
 				break;
-			case 3:
+			case 4:
 				if (autoTimer.get() < 5.0) {
-					driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_BACK);
+					driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()),
+							PTDrive.DriveType.ROBOT_RELATIVE_BACK);
 				} else {
 					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-					autoStep = 4;
+					autoStep = 5;
+					autoTimer.reset();
+					autoTimer.start();
 				}
 				break;
-			case 4:	
+			case 5:
+				if (autoTimer.get() < 0.3) {
+					driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()),
+							PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
+				} else {
+					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+					autoStep = 6;
+				}
+				break;
+			case 6:
+				if (normalizeAngle(ahrs.getAngle()) > 0) {
+					driveTrain.drive(0.0, 0.0, 0.5, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+				} else {
+					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+					autoStep = 7;
+					autoTimer.reset();
+					autoTimer.start();
+				}
+				break;
+			case 7:
+				if (autoTimer.get() < 2.0) {
+					driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()),
+							PTDrive.DriveType.ROBOT_RELATIVE_BACK);
+				} else {
+					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+					autoStep = 8;
+
+				}
+				break;
 			}
+
 		case Blue:
 			break;
+		case Invalid:
+			break;
 		}
-		// TODO
 	}
+
+	// TODO
+	
 
 	public void auto_shoot() {
 		// TODO
