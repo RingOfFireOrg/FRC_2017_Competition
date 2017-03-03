@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
 	// Joystick leftStick = new Joystick(RobotMap.leftStick);
 	// Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
-	XBoxController xbc = new XBoxController(RobotMap.xBoxController);
+//	XBoxController xbc = new XBoxController(RobotMap.xBoxController);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
 //	TurnToAngleController angleButtons = new TurnToAngleController(RobotMap.turnToAngleController);
 
@@ -111,6 +111,9 @@ public class Robot extends IterativeRobot {
 		
 		if (driveStick.getRawButton(RobotMap.btnTurnLeft))
 			driveTrain.turnToAngle(-30.0);
+		
+		if (driveStick.getRawButton(RobotMap.btnResetGyro))
+			ahrs.reset();
 		
 		double x = speedInput(driveStick.getX(), driveStick.getTrigger());
 		double y = speedInput(driveStick.getY(), driveStick.getTrigger());
