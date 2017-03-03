@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
 	XBoxController xbc = new XBoxController(RobotMap.xBoxController);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
-	TurnToAngleController angleButtons = new TurnToAngleController(RobotMap.turnToAngleController);
+//	TurnToAngleController angleButtons = new TurnToAngleController(RobotMap.turnToAngleController);
 
 	public double speedInput(double input, boolean slow) {
 		double output;
@@ -77,14 +77,14 @@ public class Robot extends IterativeRobot {
 		}
 		driveTrain = PTDrive.buildDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
 				RobotMap.rearRightMotor);
-
+		ahrs.reset();
 	}
 
 	/**
 	 * This function is called once when we go into the teleop mode
 	 */
 	public void teleopInit() {
-		ahrs.reset();
+	//	ahrs.reset();
 	}
 
 	/**
@@ -92,33 +92,30 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void teleopPeriodic() {
-		int pov = angleButtons.getPOV();
+		int pov = driveStick.getPOV();
 
 		if (pov != -1) {
 			driveTrain.turnToAngle(normalizeAngle(pov));
 		}
 
-		// testing stuff
-
-		// driveTrain.turnToAngle(xbc.getDirection());
-
-		// testing stuff
-
-		if (driveStick.getRawButton(2)) {
+		if (driveStick.getRawButton(RobotMap.btnStopTurn)) {
 			driveTrain.stopTurnToAngle();
 		}
-		if (driveStick.getRawButton(7))
+		if (driveStick.getRawButton(RobotMap.btnRobotRel))
 			driveType = PTDrive.DriveType.ROBOT_RELATIVE_FRONT;
-		if (driveStick.getRawButton(8))
+		if (driveStick.getRawButton(RobotMap.btnFieldRel))
 			driveType = PTDrive.DriveType.FIELD_RELATIVE;
 
-		if (driveStick.getRawButton(11))
+		if (driveStick.getRawButton(RobotMap.btnTurnRight))
 			driveTrain.turnToAngle(30.0);
-
+		
+		if (driveStick.getRawButton(RobotMap.btnTurnLeft))
+			driveTrain.turnToAngle(-30.0);
+		
 		double x = speedInput(driveStick.getX(), driveStick.getTrigger());
 		double y = speedInput(driveStick.getY(), driveStick.getTrigger());
 		double twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
-		if (driveStick.getRawButton(4)) {
+		if (driveStick.getRawButton(RobotMap.btnRobotRelBack)) {
 			driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_BACK);
 			cameras.changeCamera(CameraType.BACK);
 		} else {
@@ -131,10 +128,10 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("rawangle", ahrs.getAngle());
 		SmartDashboard.putNumber("targetangle", normalizeAngle(pov));
 
-		if (driveStick.getRawButton(5)) {
+		if (driveStick.getRawButton(RobotMap.btnCameraFront)) {
 			cameras.changeCamera(CameraType.FRONT);
 		}
-		if (driveStick.getRawButton(6)) {
+		if (driveStick.getRawButton(RobotMap.btnCameraBack)) {
 			cameras.changeCamera(CameraType.BACK);
 		}
 		// manipulator

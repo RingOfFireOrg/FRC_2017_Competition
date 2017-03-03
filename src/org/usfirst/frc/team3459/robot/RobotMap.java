@@ -35,8 +35,16 @@ public class RobotMap {
 	public static final int xBoxController = 3;
 	public static final int controlPanel = 1;
 	public static final int turnToAngleController = 2;
-	
-	
+	// driver buttons
+	public static final int btnStopTurn = 2;
+	public static final int btnRobotRel = 7;
+	public static final int btnFieldRel = 8;
+	public static final int btnRobotRelBack = 4;
+	public static final int btnCameraFront = 5;
+	public static final int btnCameraBack = 6;
+	public static final int btnTurnLeft = 11;
+	public static final int btnTurnRight = 12;
+	public static final int btnResetGyro = 9;
 	// analog ports
 	public static final int ultrasonicBack = 0;
 	public static final int ultrasonicLeft = 1;
