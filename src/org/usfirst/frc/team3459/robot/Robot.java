@@ -122,7 +122,6 @@ public class Robot extends IterativeRobot {
 		double twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
 		if (driveStick.getRawButton(RobotMap.btnRobotRelBack)) {
 			driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_BACK);
-			cameras.changeCamera(CameraType.BACK);
 		} else {
 			driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), driveType);
 		}
