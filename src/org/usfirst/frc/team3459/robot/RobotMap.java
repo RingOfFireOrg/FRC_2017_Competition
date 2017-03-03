@@ -58,6 +58,12 @@ public class RobotMap {
 	public static final int selector_1 = 1;
 	public static final int selector_2 = 2;
 	public static final int selector_3 = 3;
+	public static final int cardBlue = 1;
+	public static final int cardRed = 2;
+	public static final int cardBlack = 3;
+	public static final int cardGreen = 4;
+	public static final int cardYellow = 5;
+	
 	
 	public static final int btnShooter=4;
 	public static final int btnClimber=8;

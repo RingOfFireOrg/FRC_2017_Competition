@@ -39,9 +39,10 @@ public class Robot extends IterativeRobot {
 	// Joystick leftStick = new Joystick(RobotMap.leftStick);
 	// Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
-//	XBoxController xbc = new XBoxController(RobotMap.xBoxController);
+	// XBoxController xbc = new XBoxController(RobotMap.xBoxController);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
-//	TurnToAngleController angleButtons = new TurnToAngleController(RobotMap.turnToAngleController);
+	// TurnToAngleController angleButtons = new
+	// TurnToAngleController(RobotMap.turnToAngleController);
 
 	public double speedInput(double input, boolean slow) {
 		double output;
@@ -78,13 +79,14 @@ public class Robot extends IterativeRobot {
 		driveTrain = PTDrive.buildDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
 				RobotMap.rearRightMotor);
 		ahrs.reset();
+		autoTimer = new Timer();
 	}
 
 	/**
 	 * This function is called once when we go into the teleop mode
 	 */
 	public void teleopInit() {
-	//	ahrs.reset();
+		// ahrs.reset();
 	}
 
 	/**
@@ -108,13 +110,13 @@ public class Robot extends IterativeRobot {
 
 		if (driveStick.getRawButton(RobotMap.btnTurnRight))
 			driveTrain.turnToAngle(30.0);
-		
+
 		if (driveStick.getRawButton(RobotMap.btnTurnLeft))
 			driveTrain.turnToAngle(-30.0);
-		
+
 		if (driveStick.getRawButton(RobotMap.btnResetGyro))
 			ahrs.reset();
-		
+
 		double x = speedInput(driveStick.getX(), driveStick.getTrigger());
 		double y = speedInput(driveStick.getY(), driveStick.getTrigger());
 		double twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
@@ -185,18 +187,19 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
 		switch (controlPanel.getProgram()) {
-		case 1:
+
+		case RobotMap.cardBlue:
 			auto_driveForward();
 			break;
-		case 2:
+		case RobotMap.cardRed:
 			auto_depositGear();
 			break;
-		case 3:
+		case RobotMap.cardBlack:
 			auto_depositGear3(alliance);
 			break;
-//		case 4:
-//			auto_shoot();
-//			break;
+		// case RobotMap.cardGreen:
+		// auto_shoot();
+		// break;
 		default:
 			break;
 		}
@@ -204,13 +207,11 @@ public class Robot extends IterativeRobot {
 
 	public void auto_depositGear() {
 		if (autoTimer.get() < 5.0) {
-			driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()),
-					PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
+			driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
 		} else {
 			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-			
-		}
 
+		}
 
 	}
 
@@ -229,7 +230,7 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 			case 2:
-//				if (ultrasonicRight.getDistance() )
+				// if (ultrasonicRight.getDistance() )
 				break;
 			case 3:
 				if (normalizeAngle(ahrs.getAngle()) < 30) {
@@ -291,14 +292,13 @@ public class Robot extends IterativeRobot {
 	}
 
 	// TODO
-	
 
 	public void auto_shoot() {
 		// TODO
 	}
 
 	public void auto_driveForward() {
-		if (ultrasonicBack.getDistance() > 100.0) {
+		if (ultrasonicBack.getDistance() < 100.0) {
 			driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 		} else {
 			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
