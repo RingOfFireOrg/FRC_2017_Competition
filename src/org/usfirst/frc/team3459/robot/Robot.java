@@ -174,6 +174,8 @@ public class Robot extends IterativeRobot {
 		int selector = controlPanel.getProgram();
 		SmartDashboard.putNumber("Autonomous Program", selector);
 		autoStep = 1;
+		autoTimer.reset();
+		autoTimer.start();
 	}
 
 	/**
@@ -181,28 +183,35 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void autonomousPeriodic() {
-//		DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
-//		switch (controlPanel.getProgram()) {
-//		case 1:
-//			auto_driveForward();
-//			break;
-//		case 2:
-//			auto_depositGear();
-//			break;
-//		case 3:
-//			auto_depositGear3(alliance);
-//			break;
+		DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
+		switch (controlPanel.getProgram()) {
+		case 1:
+			auto_driveForward();
+			break;
+		case 2:
+			auto_depositGear();
+			break;
+		case 3:
+			auto_depositGear3(alliance);
+			break;
 //		case 4:
 //			auto_shoot();
 //			break;
-//		default:
-//			auto_driveForward();
-//			break;
-//		}
+		default:
+			break;
+		}
 	}
 
 	public void auto_depositGear() {
-		// TODO
+		if (autoTimer.get() < 5.0) {
+			driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()),
+					PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
+		} else {
+			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			
+		}
+
+
 	}
 
 	public void auto_depositGear3(DriverStation.Alliance myAlliance) {
