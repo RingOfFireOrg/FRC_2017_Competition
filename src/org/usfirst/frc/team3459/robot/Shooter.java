@@ -7,10 +7,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Shooter {
 	CANTalon wheelControl;
 	CANTalon feederControl;
+	CANTalon agitatorControl;
 
 	public Shooter() {
 		wheelControl = new CANTalon(RobotMap.shooterMotor);
 		feederControl = new CANTalon(RobotMap.feederMotor);
+		agitatorControl = new CANTalon(RobotMap.agitatorMotor);
 	}
 
 	public boolean startWheels() {
@@ -34,11 +36,13 @@ public class Shooter {
 		if (this.areWheelsOn()== false)
 			this.startWheels();
 		feederControl.set(1.0);// TODO DONT KNOW WHAT SPEED IS NEEDED
+		agitatorControl.set(-1.0);
 		return true;
 	}
 
 	public boolean stopFeeder() {
 		feederControl.set(0);
+		agitatorControl.set(0);
 		return true;
 	}
 

@@ -110,10 +110,12 @@ public class Robot extends IterativeRobot {
 
 		if (driveStick.getRawButton(RobotMap.btnTurnRight))
 			driveTrain.turnToAngle(30.0);
+		//driveTrain.mecanumDrive_Cartesian(0.5, 0.0, 0, ROBOT_RELATIVE_FRONT);
 
 		if (driveStick.getRawButton(RobotMap.btnTurnLeft))
 			driveTrain.turnToAngle(-30.0);
-
+			//driveTrain.mecanumDrive_Cartesian(-0.5, 0.0, 0.0, 0.0);
+		
 		if (driveStick.getRawButton(RobotMap.btnResetGyro))
 			ahrs.reset();
 
@@ -134,6 +136,7 @@ public class Robot extends IterativeRobot {
 
 		if (driveStick.getRawButton(RobotMap.btnCameraFront)) {
 			cameras.changeCamera(CameraType.FRONT);
+			
 		}
 		if (driveStick.getRawButton(RobotMap.btnCameraBack)) {
 			cameras.changeCamera(CameraType.BACK);
@@ -205,8 +208,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void auto_depositGear() {
-		if (autoTimer.get() < 5.0) {
-			driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
+		if (autoTimer.get() < 4.0) {
+			driveTrain.drive(0.0, 0.4, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 		} else {
 			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 

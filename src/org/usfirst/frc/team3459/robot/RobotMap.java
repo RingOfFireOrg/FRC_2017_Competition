@@ -11,9 +11,10 @@ public class RobotMap {
 	// CAN INSTEAD OF PWM  // probably all of these numbers are not quite correct (CAN)
 	public static final int shooterMotor = 4;
 	public static final int pickupMotor = 5; 
-	public static final int feederMotor = 9; //also feeder is a bad name, what does that mean?
+	public static final int feederMotor = 8; //also feeder is a bad name, what does that mean?
 	public static final int climberMotor1 = 7; // 
 	public static final int climberMotor2 = 6; // 
+	public static final int agitatorMotor = 9;
 	
 	/*
 	

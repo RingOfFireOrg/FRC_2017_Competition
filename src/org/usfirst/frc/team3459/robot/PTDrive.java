@@ -70,12 +70,12 @@ public class PTDrive extends RobotDrive {
 	private void internalDrive(double x, double y, double twist, double currentAngle, DriveType driveType) {
 		switch (driveType) {
 		case ROBOT_RELATIVE_FRONT:
-			mecanumDrive_Cartesian(x, y, twist, 0.0);
+			mecanumDrive_Cartesian(x, y, twist, 180);
 			SmartDashboard.putString("driveMode", "robot relative front");
 			break;
 
 		case ROBOT_RELATIVE_BACK:	
-			mecanumDrive_Cartesian(x, y, twist, 180.0);
+			mecanumDrive_Cartesian(x, y, twist, 0.0);
 			SmartDashboard.putString("driveMode", "robot relative back");
 			break;
 		case FIELD_RELATIVE:
