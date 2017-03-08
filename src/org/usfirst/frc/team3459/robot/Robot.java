@@ -117,23 +117,31 @@ public class Robot extends IterativeRobot {
 			driveTrain.turnToAngle(-30.0);
 		// driveTrain.mecanumDrive_Cartesian(-0.4, 0.0, 0.0, 0.0);
 
-		if (driveStick.getRawButton(RobotMap.btnResetGyro)) {
+		if (ltc.getRawButton(1)) {
 			ahrs.reset();
 			ahrs.setAngleAdjustment(180.0);
 		}
 
 		double x, y, twist;
 		if (SmartDashboard.getBoolean("this is a logitech controller", true)) {
-			x = ltc.getLeftX();
-			y = ltc.getLeftY();
-			if (ltc.getRightX() > 0.1 || ltc.getRightY() > 0.1)
-			{
-			twist = PTDrive.getSpeed(PTDrive.getDeltaAngle(ltc.getDirection(), ahrs.getAngle()));
+			if (Math.abs(ltc.getLeftX()) > 0.3) {
+				x = ltc.getLeftX() / 2;
+			} else {
+				x = 0;
 			}
-			else {
+
+			if (Math.abs(ltc.getLeftY()) > 0.3) {
+				y = ltc.getLeftY() / 2;
+			} else {
+				y = 0;
+			}
+
+			if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
+				twist = PTDrive.getSpeed(PTDrive.getDeltaAngle(ltc.getDirection() + 180 , ahrs.getAngle()));
+			} else {
 				twist = 0;
 			}
-		
+
 		} else {
 
 			x = speedInput(driveStick.getX(), driveStick.getTrigger());
