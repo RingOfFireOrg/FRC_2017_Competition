@@ -110,15 +110,19 @@ public class Robot extends IterativeRobot {
 
 		if (driveStick.getRawButton(RobotMap.btnTurnRight))
 			driveTrain.turnToAngle(30.0);
-		//driveTrain.mecanumDrive_Cartesian(0.5, 0.0, 0, ROBOT_RELATIVE_FRONT);
+		// driveTrain.mecanumDrive_Cartesian(0.4, 0.0, 0, ROBOT_RELATIVE_FRONT);
 
 		if (driveStick.getRawButton(RobotMap.btnTurnLeft))
 			driveTrain.turnToAngle(-30.0);
-			//driveTrain.mecanumDrive_Cartesian(-0.5, 0.0, 0.0, 0.0);
-		
-		if (driveStick.getRawButton(RobotMap.btnResetGyro))
-			ahrs.reset();
+		// driveTrain.mecanumDrive_Cartesian(-0.4, 0.0, 0.0, 0.0);
 
+		if (driveStick.getRawButton(RobotMap.btnResetGyro)) {
+			ahrs.reset();
+			ahrs.setAngleAdjustment(180.0);
+		}
+		
+
+		
 		double x = speedInput(driveStick.getX(), driveStick.getTrigger());
 		double y = speedInput(driveStick.getY(), driveStick.getTrigger());
 		double twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
@@ -136,7 +140,7 @@ public class Robot extends IterativeRobot {
 
 		if (driveStick.getRawButton(RobotMap.btnCameraFront)) {
 			cameras.changeCamera(CameraType.FRONT);
-			
+
 		}
 		if (driveStick.getRawButton(RobotMap.btnCameraBack)) {
 			cameras.changeCamera(CameraType.BACK);
