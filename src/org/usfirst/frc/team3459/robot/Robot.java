@@ -242,7 +242,7 @@ public class Robot extends IterativeRobot {
 			//driveTrain.drive(0.0, 0.4, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 		} 
 		
-			
+		
 		else {
 			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 
