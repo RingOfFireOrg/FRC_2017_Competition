@@ -126,8 +126,13 @@ public class Robot extends IterativeRobot {
 		if (SmartDashboard.getBoolean("this is a logitech controller", true)) {
 			x = ltc.getLeftX();
 			y = ltc.getLeftY();
+			if (ltc.getRightX() > 0.1 || ltc.getRightY() > 0.1)
+			{
 			twist = PTDrive.getSpeed(PTDrive.getDeltaAngle(ltc.getDirection(), ahrs.getAngle()));
-		
+			}
+			else {
+				twist = 0;
+			}
 		
 		} else {
 
