@@ -39,6 +39,7 @@ public class Robot extends IterativeRobot {
 	// Joystick leftStick = new Joystick(RobotMap.leftStick);
 	// Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
+	LogitechController ltc = new LogitechController(5); //TODO change number
 	// XBoxController xbc = new XBoxController(RobotMap.xBoxController);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
 	// TurnToAngleController angleButtons = new
@@ -120,7 +121,12 @@ public class Robot extends IterativeRobot {
 			ahrs.reset();
 			ahrs.setAngleAdjustment(180.0);
 		}
-		
+		//TODO
+		if (driveStick.getRawButton(12))  
+		{
+			SmartDashboard.putNumber("stick_direction", driveStick.getDirectionDegrees());
+		}
+
 
 		
 		double x = speedInput(driveStick.getX(), driveStick.getTrigger());
@@ -137,7 +143,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("rawangle", ahrs.getAngle());
 		SmartDashboard.putNumber("targetangle", normalizeAngle(pov));
-
+		SmartDashboard.putBoolean("isXbox",ltc.getIsXbox());
+		
 		if (driveStick.getRawButton(RobotMap.btnCameraFront)) {
 			cameras.changeCamera(CameraType.FRONT);
 

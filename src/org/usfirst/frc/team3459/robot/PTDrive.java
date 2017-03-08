@@ -1,6 +1,9 @@
 package org.usfirst.frc.team3459.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
@@ -87,20 +90,26 @@ public class PTDrive extends RobotDrive {
 		}
 	}
 
-	void drive(double x, double y, double twist, double currentAngle, DriveType driveType) {
+	XBoxController xbc = new XBoxController(RobotMap.xBoxController);
+	AHRS ahrs;
+	LogitechController ltc = new LogitechController(5);
+	Joystick driveStick = new Joystick(RobotMap.driveStick);
+
+	public void drive(double x, double y, double twist, double currentAngle, DriveType driveType) {
 		if (rotateToAngle) {
-			SmartDashboard.putNumber("targetAngle", targetAngle);
-			SmartDashboard.putNumber("currentAngle", currentAngle);
+
+			double targetAngle = driveStick.getDirectionDegrees();
+			currentAngle = Robot.normalizeAngle(ahrs.getAngle());
 			double deltaAngle = getDeltaAngle(targetAngle, currentAngle);
-			SmartDashboard.putNumber("deltaAngle", deltaAngle);
-			SmartDashboard.putNumber("Speed", getSpeed(deltaAngle));
+			
+			
 			internalDrive(x, y, getSpeed(deltaAngle), currentAngle, driveType);
-			if (Math.abs(deltaAngle) < 1.0) {
-				SmartDashboard.putString("diag", "Stopped going to " + targetAngle + " Due to " + deltaAngle);
-				stopTurnToAngle();
-			}
-		} else {
+
+		}
+
+		else {
 			internalDrive(x, y, twist, currentAngle, driveType);
 		}
+
 	}
 }
