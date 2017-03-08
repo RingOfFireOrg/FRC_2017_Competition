@@ -204,6 +204,7 @@ public class Robot extends IterativeRobot {
 		ahrs.reset();
 		int selector = controlPanel.getProgram();
 		SmartDashboard.putNumber("Autonomous Program", selector);
+		
 		autoStep = 1;
 		autoTimer.reset();
 		autoTimer.start();
@@ -214,6 +215,7 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void autonomousPeriodic() {
+		SmartDashboard.putNumber("auto timer", autoTimer.get());
 		DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
 		switch (controlPanel.getProgram()) {
 
@@ -236,8 +238,12 @@ public class Robot extends IterativeRobot {
 
 	public void auto_depositGear() {
 		if (autoTimer.get() < 4.0) {
-			driveTrain.drive(0.0, 0.4, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-		} else {
+			driveTrain.drive(0.0, 0.5, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0 , ahrs.getAngle())), normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			//driveTrain.drive(0.0, 0.4, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+		} 
+		
+			
+		else {
 			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 
 		}
