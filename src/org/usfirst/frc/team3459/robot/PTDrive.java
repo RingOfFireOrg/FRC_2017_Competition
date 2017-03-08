@@ -1,9 +1,6 @@
 package org.usfirst.frc.team3459.robot;
 
-import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
@@ -57,11 +54,11 @@ public class PTDrive extends RobotDrive {
 		rotateToAngle = false;
 	}
 
-	private double getDeltaAngle(double targetAngle, double currentAngle) {
+	public static double getDeltaAngle(double targetAngle, double currentAngle) {
 		return Robot.normalizeAngle(targetAngle - currentAngle);
 	}
 
-	private double getSpeed(double deltaAngle) {
+	public static double getSpeed(double deltaAngle) {
 		double scale = 0.3;
 		double offset = 0.2;
 		if (deltaAngle < 0.0){
@@ -90,26 +87,20 @@ public class PTDrive extends RobotDrive {
 		}
 	}
 
-	XBoxController xbc = new XBoxController(RobotMap.xBoxController);
-	AHRS ahrs;
-	LogitechController ltc = new LogitechController(5);
-	Joystick driveStick = new Joystick(RobotMap.driveStick);
-
-	public void drive(double x, double y, double twist, double currentAngle, DriveType driveType) {
+	void drive(double x, double y, double twist, double currentAngle, DriveType driveType) {
 		if (rotateToAngle) {
-
-			double targetAngle = driveStick.getDirectionDegrees();
-			currentAngle = Robot.normalizeAngle(ahrs.getAngle());
+			SmartDashboard.putNumber("targetAngle", targetAngle);
+			SmartDashboard.putNumber("currentAngle", currentAngle);
 			double deltaAngle = getDeltaAngle(targetAngle, currentAngle);
-			
-			
+			SmartDashboard.putNumber("deltaAngle", deltaAngle);
+			SmartDashboard.putNumber("Speed", getSpeed(deltaAngle));
 			internalDrive(x, y, getSpeed(deltaAngle), currentAngle, driveType);
-
-		}
-
-		else {
+			if (Math.abs(deltaAngle) < 1.0) {
+				SmartDashboard.putString("diag", "Stopped going to " + targetAngle + " Due to " + deltaAngle);
+				stopTurnToAngle();
+			}
+		} else {
 			internalDrive(x, y, twist, currentAngle, driveType);
 		}
-
 	}
 }

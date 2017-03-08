@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
 	// Joystick leftStick = new Joystick(RobotMap.leftStick);
 	// Joystick rightStick = new Joystick(RobotMap.rightStick);
 	Joystick driveStick = new Joystick(RobotMap.driveStick);
-	LogitechController ltc = new LogitechController(5); //TODO change number
+	LogitechController ltc = new LogitechController(5);
 	// XBoxController xbc = new XBoxController(RobotMap.xBoxController);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
 	// TurnToAngleController angleButtons = new
@@ -121,17 +121,21 @@ public class Robot extends IterativeRobot {
 			ahrs.reset();
 			ahrs.setAngleAdjustment(180.0);
 		}
-		//TODO
-		if (driveStick.getRawButton(12))  
-		{
-			SmartDashboard.putNumber("stick_direction", driveStick.getDirectionDegrees());
+
+		double x, y, twist;
+		if (SmartDashboard.getBoolean("this is a logitech controller", true)) {
+			x = ltc.getLeftX();
+			y = ltc.getLeftY();
+			twist = PTDrive.getSpeed(PTDrive.getDeltaAngle(ltc.getDirection(), ahrs.getAngle()));
+		
+		
+		} else {
+
+			x = speedInput(driveStick.getX(), driveStick.getTrigger());
+			y = speedInput(driveStick.getY(), driveStick.getTrigger());
+			twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
 		}
 
-
-		
-		double x = speedInput(driveStick.getX(), driveStick.getTrigger());
-		double y = speedInput(driveStick.getY(), driveStick.getTrigger());
-		double twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
 		if (driveStick.getRawButton(RobotMap.btnRobotRelBack)) {
 			driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_BACK);
 		} else {
@@ -143,8 +147,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("rawangle", ahrs.getAngle());
 		SmartDashboard.putNumber("targetangle", normalizeAngle(pov));
-		SmartDashboard.putBoolean("isXbox",ltc.getIsXbox());
-		
+
 		if (driveStick.getRawButton(RobotMap.btnCameraFront)) {
 			cameras.changeCamera(CameraType.FRONT);
 

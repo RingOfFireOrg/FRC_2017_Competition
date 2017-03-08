@@ -10,28 +10,27 @@ public class LogitechController extends Joystick {
 	 * Raw axis for xboxController & Logitech Controller
 	 * https://cdn.instructables.com/FNC/IF2H/HV3Q6145/FNCIF2HHV3Q6145.MEDIUM.jpg?width=614
 	 */
-	public static final int leftStickX = 12, leftStickY = 2, rightStickX = 0, rightStickY = 1;
+	public static final int leftStickX = 0, leftStickY = 1, rightStickX = 4, rightStickY = 5;
 	
-	private Joystick j;
 
 	public double getLeftX() {
-		return j.getRawAxis(leftStickX);
+		return this.getRawAxis(leftStickX);
 	}
 
 	public double getLeftY() {
-		return j.getRawAxis(leftStickY);
+		return this.getRawAxis(leftStickY);
 	}
 
 	public double getRightX() {
-		return j.getRawAxis(rightStickX);
+		return this.getRawAxis(rightStickX);
 	}
 	
 	public double getRightY() {
-		return j.getRawAxis(rightStickY);
+		return this.getRawAxis(rightStickY);
 	}
 
 	public double getDirection() {
-		return Math.toDegrees(Math.atan2(j.getRawAxis(rightStickX), j.getRawAxis(-rightStickY)));
+		return Math.toDegrees(Math.atan2(this.getRawAxis(rightStickX), -this.getRawAxis(rightStickY)));
 	}
 		
 	
