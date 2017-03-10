@@ -85,7 +85,7 @@ public class Robot extends IterativeRobot {
 		autoTimer = new Timer();
 		autoChooser = new SendableChooser<Integer>();
 		autoChooser.addObject("GearLeft", RobotMap.autoGearLeft);
-		autoChooser.addObject("GearStraight", RobotMap.autoGearStraight);
+		autoChooser.addDefault("GearStraight", RobotMap.autoGearStraight);
 		autoChooser.addObject("GearRight", RobotMap.autoGearRight);
 		SmartDashboard.putData("Auto", autoChooser);
 
