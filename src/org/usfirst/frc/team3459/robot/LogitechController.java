@@ -10,9 +10,10 @@ public class LogitechController extends Joystick {
 
 	/**
 	 * Raw axis for xboxController & Logitech Controller
-	 * https://cdn.instructables.com/FNC/IF2H/HV3Q6145/FNCIF2HHV3Q6145.MEDIUM.jpg?width=614
+	 * someone find a pic of the dual action 
+	 * 
 	 */
-	public static final int leftStickX = 0, leftStickY = 1, rightStickX = 4, rightStickY = 5;
+	public static final int leftStickX = 0, leftStickY = 1, rightStickX = 2, rightStickY = 3;
 
 
 	private double deadZone(double raw) {

@@ -2,7 +2,6 @@ package org.usfirst.frc.team3459.robot;
 
 import org.usfirst.frc.team3459.robot.Cameras.CameraType;
 
-import com.ctre.CANTalon;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -11,6 +10,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -33,6 +33,8 @@ public class Robot extends IterativeRobot {
 	PTDrive.DriveType driveType = PTDrive.DriveType.FIELD_RELATIVE;
 	int autoStep = 1;
 	Timer autoTimer;
+
+	SendableChooser<Integer> autoChooser;
 	// operations
 
 	AHRS ahrs;
@@ -48,7 +50,7 @@ public class Robot extends IterativeRobot {
 	public double speedInput(double input, boolean slow) {
 		double output;
 		if (slow)
-			input = input * 0.75;
+			input = input * 0.65;
 		output = input * input;
 		if (input < 0.0)
 			output = output * -1.0;
@@ -81,6 +83,12 @@ public class Robot extends IterativeRobot {
 				RobotMap.rearRightMotor);
 		ahrs.reset();
 		autoTimer = new Timer();
+		autoChooser = new SendableChooser<Integer>();
+		autoChooser.addObject("GearLeft", RobotMap.autoGearLeft);
+		autoChooser.addObject("GearStraight", RobotMap.autoGearStraight);
+		autoChooser.addObject("GearRight", RobotMap.autoGearRight);
+		SmartDashboard.putData("Auto", autoChooser);
+
 	}
 
 	/**
@@ -195,7 +203,8 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousInit() {
 		ahrs.reset();
-		int selector = controlPanel.getProgram();
+		int selector = autoChooser.getSelected();
+
 		SmartDashboard.putNumber("Autonomous Program", selector);
 
 		autoStep = 1;
@@ -210,20 +219,12 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		SmartDashboard.putNumber("auto timer", autoTimer.get());
 		DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
-		switch (controlPanel.getProgram()) {
+		switch (autoChooser.getSelected()) {
 
-		case RobotMap.cardBlue:
-			auto_driveForward();
-			break;
-		case RobotMap.cardRed:
+		case RobotMap.autoGearStraight:
 			auto_depositGear();
 			break;
-		case RobotMap.cardBlack:
-			auto_depositGear3(alliance);
-			break;
-		// case RobotMap.cardGreen:
-		// auto_shoot();
-		// break;
+
 		default:
 			break;
 		}
