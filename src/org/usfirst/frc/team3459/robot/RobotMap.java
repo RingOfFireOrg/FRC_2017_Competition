@@ -45,6 +45,9 @@ public class RobotMap {
 	public static final int btnTurnLeft = 11;
 	public static final int btnTurnRight = 12;
 	public static final int btnResetGyro = 9;
+	// logitech controller buttons
+	public static final int leftTrigger = 7;
+	public static final int rightTrigger = 8;
 	// analog ports
 	public static final int ultrasonicBack = 0;
 	public static final int ultrasonicLeft = 1;

@@ -10,8 +10,8 @@ public class Climber {
 	}
 	
 	public boolean start() {
-		climbControl1.set(1.0); // TODO DONT KNOW WHAT SPEED IS NEEDED
-		climbControl2.set(-1.0); // TODO DONT KNOW WHAT SPEED IS NEEDED. However, both motors must spin opposite directions (there is a better way to do this but IDK how)
+		climbControl1.set(1.0); 
+		climbControl2.set(-1.0); //both climber motors spin in opposite directions.
 		return true;
 	}
 	public boolean stop(){

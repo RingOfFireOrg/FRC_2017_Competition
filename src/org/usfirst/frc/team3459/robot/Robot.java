@@ -48,7 +48,7 @@ public class Robot extends IterativeRobot {
 	public double speedInput(double input, boolean slow) {
 		double output;
 		if (slow)
-			input = input / 2;
+			input = input * 0.75;
 		output = input * input;
 		if (input < 0.0)
 			output = output * -1.0;
@@ -88,6 +88,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopInit() {
 		// ahrs.reset();
+		SmartDashboard.putBoolean("is this a logitech controller", true);
 	}
 
 	/**
@@ -123,21 +124,13 @@ public class Robot extends IterativeRobot {
 		}
 
 		double x, y, twist;
-		if (SmartDashboard.getBoolean("this is a logitech controller", true)) {
-			if (Math.abs(ltc.getLeftX()) > 0.3) {
-				x = ltc.getLeftX() / 2;
-			} else {
-				x = 0;
-			}
+		if (SmartDashboard.getBoolean("is this a logitech controller", true)) {
 
-			if (Math.abs(ltc.getLeftY()) > 0.3) {
-				y = ltc.getLeftY() / 2;
-			} else {
-				y = 0;
-			}
+			x = speedInput(ltc.getLeftX(), ltc.getTriggers());
+			y = speedInput(ltc.getLeftY(), ltc.getTriggers());
 
 			if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
-				twist = PTDrive.getSpeed(PTDrive.getDeltaAngle(ltc.getDirection() + 180 , ahrs.getAngle()));
+				twist = PTDrive.getSpeed(PTDrive.getDeltaAngle(ltc.getDirection(), ahrs.getAngle()));
 			} else {
 				twist = 0;
 			}
@@ -204,7 +197,7 @@ public class Robot extends IterativeRobot {
 		ahrs.reset();
 		int selector = controlPanel.getProgram();
 		SmartDashboard.putNumber("Autonomous Program", selector);
-		
+
 		autoStep = 1;
 		autoTimer.reset();
 		autoTimer.start();
@@ -237,12 +230,14 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void auto_depositGear() {
-		if (autoTimer.get() < 4.0) {
-			driveTrain.drive(0.0, 0.5, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0 , ahrs.getAngle())), normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-			//driveTrain.drive(0.0, 0.4, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-		} 
-		
-		
+		if (autoTimer.get() < 2.0) {
+
+			driveTrain.drive(0.0, 0.5, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
+					normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			// driveTrain.drive(0.0, 0.4, 0.0, normalizeAngle(ahrs.getAngle()),
+			// PTDrive.DriveType.FIELD_RELATIVE);
+		}
+
 		else {
 			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 
@@ -325,8 +320,6 @@ public class Robot extends IterativeRobot {
 			break;
 		}
 	}
-
-	// TODO
 
 	public void auto_shoot() {
 		// TODO
