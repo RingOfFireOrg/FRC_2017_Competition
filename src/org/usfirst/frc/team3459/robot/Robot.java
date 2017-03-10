@@ -126,7 +126,7 @@ public class Robot extends IterativeRobot {
 			driveTrain.turnToAngle(-30.0);
 		// driveTrain.mecanumDrive_Cartesian(-0.4, 0.0, 0.0, 0.0);
 
-		if (ltc.getRawButton(1)) {
+		if (ltc.getRawButton(RobotMap.ltcAButton)) {
 			ahrs.reset();
 			ahrs.setAngleAdjustment(180.0);
 		}
@@ -136,15 +136,15 @@ public class Robot extends IterativeRobot {
 
 			x = speedInput(ltc.getLeftX(), ltc.getTriggers());
 			y = speedInput(ltc.getLeftY(), ltc.getTriggers());
+			twist = 0;
 
 			if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
-				twist = PTDrive.getSpeed(PTDrive.getDeltaAngle(ltc.getDirection(), ahrs.getAngle()));
-			} else {
-				twist = 0;
+				double deltaAngle = PTDrive.getDeltaAngle(ltc.getDirection(), ahrs.getAngle());
+				if (Math.abs(deltaAngle) > 0.5) {
+					twist = PTDrive.getSpeed(deltaAngle);
+				}
 			}
-
 		} else {
-
 			x = speedInput(driveStick.getX(), driveStick.getTrigger());
 			y = speedInput(driveStick.getY(), driveStick.getTrigger());
 			twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
