@@ -72,9 +72,8 @@ public class RobotMap {
 	public static final int cardYellow = 5;
 	
 	// autonomous
-	public static final int autoGearLeft = 1;
+	public static final int autoGearBoiler = 1;
 	public static final int autoGearStraight = 2;
-	public static final int autoGearRight = 3;
 	
 	
 	

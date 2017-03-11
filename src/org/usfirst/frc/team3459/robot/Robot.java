@@ -84,9 +84,8 @@ public class Robot extends IterativeRobot {
 		ahrs.reset();
 		autoTimer = new Timer();
 		autoChooser = new SendableChooser<Integer>();
-		autoChooser.addObject("GearLeft", RobotMap.autoGearLeft);
+		autoChooser.addObject("GearBoiler", RobotMap.autoGearBoiler);
 		autoChooser.addDefault("GearStraight", RobotMap.autoGearStraight);
-		autoChooser.addObject("GearRight", RobotMap.autoGearRight);
 		SmartDashboard.putData("Auto", autoChooser);
 
 	}
@@ -130,6 +129,10 @@ public class Robot extends IterativeRobot {
 			ahrs.reset();
 			ahrs.setAngleAdjustment(180.0);
 		}
+		if (ltc.getRawButton(RobotMap.ltcBButton)) {
+			ahrs.reset();
+			ahrs.setAngleAdjustment(0.0);
+		}
 
 		double x, y, twist;
 		if (SmartDashboard.getBoolean("is this a logitech controller", true)) {
@@ -139,7 +142,7 @@ public class Robot extends IterativeRobot {
 			twist = 0;
 
 			if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
-				double deltaAngle = PTDrive.getDeltaAngle(ltc.getDirection(), ahrs.getAngle());
+				double deltaAngle = PTDrive.getDeltaAngle(ltc.getDirection() + 180, ahrs.getAngle());
 				if (Math.abs(deltaAngle) > 0.5) {
 					twist = PTDrive.getSpeed(deltaAngle);
 				}
@@ -225,6 +228,10 @@ public class Robot extends IterativeRobot {
 			auto_depositGear();
 			break;
 
+		case RobotMap.autoGearBoiler:
+			auto_depositGearBoiler(alliance);
+			break;
+
 		default:
 			break;
 		}
@@ -246,6 +253,54 @@ public class Robot extends IterativeRobot {
 
 	}
 
+	int targetAngle = 0;
+
+	public void auto_depositGearBoiler(DriverStation.Alliance myAlliance) {
+		switch (autoStep) {
+		case 1:
+			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
+			if (ultrasonicBack.getDistance() < 40) {
+				driveTrain.drive(0.0, 0.5, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
+						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			} else {
+				autoStep = 2;
+			}
+			break;
+		case 2:
+			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
+			if (ultrasonicBack.getDistance() < 59.25) {
+				driveTrain.drive(0.0, 0.2, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
+						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			} else {
+				autoStep = 3;
+			}
+			break;
+		case 3:
+			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
+			if (myAlliance == DriverStation.Alliance.Red) {
+				targetAngle = -60;
+			} else {
+				targetAngle = 60;
+			}
+			driveTrain.turnToAngle(normalizeAngle(targetAngle));
+			if (Math.abs(normalizeAngle(ahrs.getAngle() - targetAngle)) < 1) {
+				autoStep = 4;
+				autoTimer.reset();
+			} else {
+				driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			}
+			break;
+		case 4:
+			if (autoTimer.get() < 1.5) {
+				driveTrain.drive(Math.cos(30.0*2*Math.PI/360)*.5, Math.sin(30.0*2*Math.PI/360)*.5, 
+						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
+						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			} else {
+				driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			}
+		}
+	}
+
 	public void auto_depositGear3(DriverStation.Alliance myAlliance) {
 		final int kDriveDistance = 100; // TODO: We know this is wrong
 
@@ -254,9 +309,13 @@ public class Robot extends IterativeRobot {
 			switch (autoStep) {
 			case 1:
 				if (ultrasonicBack.getDistance() < kDriveDistance) {
-					driveTrain.drive(0.0, 0.5, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+					// driveTrain.drive(0.0, 0.5, 0.0,
+					// normalizeAngle(ahrs.getAngle()),
+					// PTDrive.DriveType.FIELD_RELATIVE);
 				} else {
-					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+					// driveTrain.drive(0.0, 0.0, 0.0,
+					// normalizeAngle(ahrs.getAngle()),
+					// PTDrive.DriveType.FIELD_RELATIVE);
 					autoStep = 2;
 				}
 				break;
