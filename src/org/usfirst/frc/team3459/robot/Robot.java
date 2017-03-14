@@ -255,6 +255,86 @@ public class Robot extends IterativeRobot {
 
 	int targetAngle = 0;
 
+	public void auto_depositGearFeederStationSide(DriverStation.Alliance myAlliance) {
+		switch (autoStep) {
+		case 1: //finished?  All of these still need review
+			// drive to get away from the wall a few inches
+			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
+			if (ultrasonicBack.getDistance() < 3) { // not sure if the robot
+													// will actually move 3
+													// inches may need to
+													// increase distance
+				driveTrain.drive(0.0, 0.5, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
+						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			} else {
+				autoStep = 2;
+			}
+			break;
+		case 2: //finished?
+			// turn to 60 degrees(parallel to line)decide which direction based off of alliance
+			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
+			if (myAlliance == DriverStation.Alliance.Red) {
+				targetAngle = -60;
+			} else {
+				targetAngle = 60;
+			}//not sure this is right might need to be reversed
+			driveTrain.turnToAngle(normalizeAngle(targetAngle));
+			if (Math.abs(normalizeAngle(ahrs.getAngle() - targetAngle)) < 1) {
+				autoStep = 3;
+				autoTimer.reset();
+			} else {
+				driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			}
+			break;
+		case 3://figure out how to make it drive at an angle
+			// drive x" at .5 speed: get close
+			//total inches we want to drive this direction is 71.37
+			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
+			if (ultrasonicBack.getDistance() < 50) {
+				driveTrain.drive(0.0, 0.5, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
+						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			} else {
+				autoStep = 4;
+			}
+			break;
+		case 4://ditto drive at an angle
+			// drive the rest of the distance at .2 speed: be accurate
+			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
+			if (ultrasonicBack.getDistance() < 71.37) {
+				driveTrain.drive(0.0, 0.5, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
+						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			} else {
+				autoStep = 5;
+			}
+			break;
+		case 5://finished?
+			// turn to -30 degrees so that you are facing the spring
+			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
+			if (myAlliance == DriverStation.Alliance.Red) {
+				targetAngle = 30;
+			} else {
+				targetAngle = -30;
+			}//not sure this is right might need to be reversed
+			driveTrain.turnToAngle(normalizeAngle(targetAngle));
+			if (Math.abs(normalizeAngle(ahrs.getAngle() - targetAngle)) < 1) {
+				autoStep = 6;
+				autoTimer.reset();
+			} else {
+				driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			}
+			break;
+		case 6://finished?
+			// drive a certain amount of time to the spring
+			if (autoTimer.get() < 1.5) {
+				driveTrain.drive(Math.cos(30.0 * 2 * Math.PI / 360) * .5, Math.sin(30.0 * 2 * Math.PI / 360) * .5,
+						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
+						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			} else {
+				driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			}
+		}
+	}
+
 	public void auto_depositGearBoiler(DriverStation.Alliance myAlliance) {
 		switch (autoStep) {
 		case 1:
@@ -292,7 +372,8 @@ public class Robot extends IterativeRobot {
 			break;
 		case 4:
 			if (autoTimer.get() < 1.5) {
-				driveTrain.drive(Math.cos(30.0*2*Math.PI/360)*.5, Math.sin(30.0*2*Math.PI/360)*.5, 
+				//Alan doesn't think the line below will work: look at that
+				driveTrain.drive(Math.cos(30.0 * 2 * Math.PI / 360) * .5, Math.sin(30.0 * 2 * Math.PI / 360) * .5,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
