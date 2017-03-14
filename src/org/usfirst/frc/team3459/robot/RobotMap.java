@@ -74,7 +74,7 @@ public class RobotMap {
 	// autonomous
 	public static final int autoGearBoiler = 1;
 	public static final int autoGearStraight = 2;
-	
+	public static final int autoGearFeederStation = 3;
 	
 	
 	public static final int btnShooter=4;
