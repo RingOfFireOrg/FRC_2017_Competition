@@ -201,7 +201,7 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
-	/**
+/**
 	 * This function is called once when we go into the Autonomous mode
 	 */
 	public void autonomousInit() {
@@ -474,11 +474,52 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
-	/**
-	 * This function is called periodically during test mode
-	 */
+	
+	 public void testInit()
+	 {
+ 
+	 }
+	 /**
+		 * This function is called periodically during test mode
+		 */
 	public void testPeriodic() {
 		LiveWindow.run(); // This makes sure the values of items are correct on
 							// the driver station during test mode.
+		
+		if (ltc.getRawButton(RobotMap.ltcXButton))
+		{
+			driveTrain.test(true, true, 1.0);
+		}
+		else
+		{
+			driveTrain.test(true, true, 0.0);
+		}
+		
+		if (ltc.getRawButton(RobotMap.ltcYButton))
+		{
+			driveTrain.test(true, false, 1.0);
+		}
+		else
+		{
+			driveTrain.test(true, false, 0.0);
+		}
+		
+		if (ltc.getRawButton(RobotMap.ltcAButton))
+		{
+			driveTrain.test(false, true, 1.0);
+		}
+		else
+		{
+			driveTrain.test(false, true, 0.0);
+		}
+		
+		if (ltc.getRawButton(RobotMap.ltcBButton))
+		{
+			driveTrain.test(false, false, 1.0);
+		}
+		else
+		{
+			driveTrain.test(false, false, 0.0);
+		}
 	}
 }
