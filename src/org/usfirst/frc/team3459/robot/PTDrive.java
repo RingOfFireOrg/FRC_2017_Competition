@@ -103,4 +103,34 @@ public class PTDrive extends RobotDrive {
 			internalDrive(x, y, twist, currentAngle, driveType);
 		}
 	}
+	void test(boolean front, boolean left, double speed)
+	{
+
+		if(front== true)
+		{
+			if(left== true)
+			{
+				m_frontLeftMotor.set(speed);
+			}
+			else
+			{
+				m_frontRightMotor.set(speed);
+			}
+		}
+		else
+		{
+			if(left== true)
+			{
+				m_rearLeftMotor.set(speed);
+			}
+			else
+			{
+				m_rearRightMotor.set(speed);
+			}
+		}
+		
+		
+		
+		
+	}
 }
