@@ -232,7 +232,7 @@ public class Robot extends IterativeRobot {
 		case RobotMap.autoGearBoiler:
 			auto_depositGearBoiler(alliance);
 			break;
-			
+
 		case RobotMap.autoGearFeederStation:
 			auto_depositGearFeederStationSide(alliance);
 			break;
@@ -250,7 +250,6 @@ public class Robot extends IterativeRobot {
 			// driveTrain.drive(0.0, 0.4, 0.0, normalizeAngle(ahrs.getAngle()),
 			// PTDrive.DriveType.FIELD_RELATIVE);
 		}
-
 		else {
 			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 
@@ -262,16 +261,17 @@ public class Robot extends IterativeRobot {
 
 	public void auto_depositGearFeederStationSide(DriverStation.Alliance myAlliance) {
 		switch (autoStep) {
-		case 1: 
+		case 1:
 			// drive to get away from the wall a few inches
-			if (ultrasonicBack.getDistance() < 6) { //may need to + or - distance
+			if (ultrasonicBack.getDistance() < 6) { // may need to + or -
+													// distance
 				driveTrain.drive(0.0, 0.5, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
 				autoStep = 2;
 			}
 			break;
-		case 2: 
+		case 2:
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
 				targetAngle = -60;
@@ -279,10 +279,12 @@ public class Robot extends IterativeRobot {
 			} else {
 				targetAngle = 60;
 				autoStep = 3;
-			}break;
+			}
+			break;
 		case 3:
 			// turn to 60 degrees(parallel to line) so we don't hit the airship
-			if (Math.abs(normalizeAngle(ahrs.getAngle() - targetAngle)) < 1) { //bigger tolerance?
+			if (Math.abs(normalizeAngle(ahrs.getAngle() - targetAngle)) < 1) { // bigger
+																				// tolerance?
 				autoStep = 4;
 				autoTimer.reset();
 			} else {
@@ -292,8 +294,9 @@ public class Robot extends IterativeRobot {
 		case 4:
 			// drive x" at .5 speed: get close
 			// total inches we want to drive this direction is 71.37
+			//changed to 51.37 because subtracting half of the bot length bc pivoting at middle of bot
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
-			if (ultrasonicBack.getDistance() < 50) {
+			if (ultrasonicBack.getDistance() < 30) {//might have changed this number wrong...
 				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .5,
 						Math.sin(targetAngle * 2 * Math.PI / 360) * .5,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
@@ -305,10 +308,11 @@ public class Robot extends IterativeRobot {
 		case 5:
 			// drive the rest of the distance at .2 speed: be accurate
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
-			if (ultrasonicBack.getDistance() < 71.37) {
+			if (ultrasonicBack.getDistance() < 51.37) {
 				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .2,
 						Math.sin(targetAngle * 2 * Math.PI / 360) * .2,
-						//the following two lines are to correct the drift so it will drive straight
+						// the following two lines are to correct the drift so
+						// it will drive straight
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
@@ -316,7 +320,7 @@ public class Robot extends IterativeRobot {
 			}
 			break;
 		case 6:
-				// turn to -30 degrees to face spring
+			// turn to -30 degrees to face spring
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
 				targetAngle = 30;
@@ -332,7 +336,7 @@ public class Robot extends IterativeRobot {
 			}
 			break;
 		case 7:
-				// drive to the spring for x seconds
+			// drive to the spring for x seconds
 			if (autoTimer.get() < 1.5) {
 				driveTrain.drive(Math.cos(30.0 * 2 * Math.PI / 360) * .5, Math.sin(30.0 * 2 * Math.PI / 360) * .5,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
@@ -366,7 +370,7 @@ public class Robot extends IterativeRobot {
 		case 3:
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
-				targetAngle = -60;
+				targetAngle = -60;//why is this 60??? shouldn't it be 30???
 			} else {
 				targetAngle = 60;
 			}
@@ -380,6 +384,7 @@ public class Robot extends IterativeRobot {
 			break;
 		case 4:
 			if (autoTimer.get() < 1.5) {
+				//might need to change target angle back to 30
 				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .5,
 						Math.sin(targetAngle * 2 * Math.PI / 360) * .5,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
@@ -389,6 +394,7 @@ public class Robot extends IterativeRobot {
 			}
 		}
 	}
+
 	public void testInit() {
 
 	}
