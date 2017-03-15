@@ -103,54 +103,43 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void teleopPeriodic() {
-		int pov = driveStick.getPOV();
 
-		if (pov != -1) {
-			driveTrain.turnToAngle(normalizeAngle(pov));
-		}
-
-		if (driveStick.getRawButton(RobotMap.btnStopTurn)) {
-			driveTrain.stopTurnToAngle();
-		}
-		if (driveStick.getRawButton(RobotMap.btnRobotRel))
+		if (ltc.getRawButton(RobotMap.btnRobotRel))
 			driveType = PTDrive.DriveType.ROBOT_RELATIVE_FRONT;
-		if (driveStick.getRawButton(RobotMap.btnFieldRel))
+
+		if (ltc.getRawButton(RobotMap.btnFieldRel))
 			driveType = PTDrive.DriveType.FIELD_RELATIVE;
 
-		if (driveStick.getRawButton(RobotMap.btnTurnRight))
-			driveTrain.turnToAngle(30.0);
-		// driveTrain.mecanumDrive_Cartesian(0.4, 0.0, 0, ROBOT_RELATIVE_FRONT);
-
-		if (driveStick.getRawButton(RobotMap.btnTurnLeft))
-			driveTrain.turnToAngle(-30.0);
-		// driveTrain.mecanumDrive_Cartesian(-0.4, 0.0, 0.0, 0.0);
+		/*
+		 * if (driveStick.getRawButton(RobotMap.btnTurnRight))
+		 * driveTrain.turnToAngle(30.0); driveTrain.mecanumDrive_Cartesian(0.4,
+		 * 0.0, 0, ROBOT_RELATIVE_FRONT);
+		 * 
+		 * TODO test if two turnToAngle buttons would be nice (if working). And
+		 * test if a strafe button would be nice
+		 * 
+		 * if (driveStick.getRawButton(RobotMap.btnTurnLeft))
+		 * driveTrain.turnToAngle(-30.0);
+		 * driveTrain.mecanumDrive_Cartesian(-0.4, 0.0, 0.0, 0.0);
+		 */
 
 		if (ltc.getRawButton(RobotMap.ltcAButton)) {
-			ahrs.reset();
 			ahrs.setAngleAdjustment(180.0);
 		}
 		if (ltc.getRawButton(RobotMap.ltcBButton)) {
-			ahrs.reset();
 			ahrs.setAngleAdjustment(0.0);
 		}
 
 		double x, y, twist;
-		if (SmartDashboard.getBoolean("is this a logitech controller", true)) {
+		x = speedInput(ltc.getLeftX(), ltc.getTriggers());
+		y = speedInput(ltc.getLeftY(), ltc.getTriggers());
+		twist = 0;
 
-			x = speedInput(ltc.getLeftX(), ltc.getTriggers());
-			y = speedInput(ltc.getLeftY(), ltc.getTriggers());
-			twist = 0;
-
-			if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
-				double deltaAngle = PTDrive.getDeltaAngle(ltc.getDirection() + 180, ahrs.getAngle());
-				if (Math.abs(deltaAngle) > 0.5) {
-					twist = PTDrive.getSpeed(deltaAngle);
-				}
+		if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
+			double deltaAngle = PTDrive.getDeltaAngle(ltc.getDirection() + 180, ahrs.getAngle());
+			if (Math.abs(deltaAngle) > 0.5) {
+				twist = PTDrive.getSpeed(deltaAngle);
 			}
-		} else {
-			x = speedInput(driveStick.getX(), driveStick.getTrigger());
-			y = speedInput(driveStick.getY(), driveStick.getTrigger());
-			twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
 		}
 
 		if (driveStick.getRawButton(RobotMap.btnRobotRelBack)) {
@@ -162,14 +151,14 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("distance right", ultrasonicRight.getDistance());
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
-		SmartDashboard.putNumber("rawangle", ahrs.getAngle());
-		SmartDashboard.putNumber("targetangle", normalizeAngle(pov));
+	//shouldnt be needed anymore	SmartDashboard.putNumber("rawangle", ahrs.getAngle());
+		SmartDashboard.putNumber("targetAngle", ltc.getDirection());
 
-		if (driveStick.getRawButton(RobotMap.btnCameraFront)) {
+		if (ltc.getRawButton(RobotMap.btnCameraFront)) {
 			cameras.changeCamera(CameraType.FRONT);
-
 		}
-		if (driveStick.getRawButton(RobotMap.btnCameraBack)) {
+
+		if (ltc.getRawButton(RobotMap.btnCameraBack)) {
 			cameras.changeCamera(CameraType.BACK);
 		}
 		// manipulator
@@ -249,8 +238,7 @@ public class Robot extends IterativeRobot {
 					normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			// driveTrain.drive(0.0, 0.4, 0.0, normalizeAngle(ahrs.getAngle()),
 			// PTDrive.DriveType.FIELD_RELATIVE);
-		}
-		else {
+		} else {
 			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 
 		}
@@ -294,9 +282,11 @@ public class Robot extends IterativeRobot {
 		case 4:
 			// drive x" at .5 speed: get close
 			// total inches we want to drive this direction is 71.37
-			//changed to 51.37 because subtracting half of the bot length bc pivoting at middle of bot
+			// changed to 51.37 because subtracting half of the bot length bc
+			// pivoting at middle of bot
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
-			if (ultrasonicBack.getDistance() < 30) {//might have changed this number wrong...
+			if (ultrasonicBack.getDistance() < 30) {// might have changed this
+													// number wrong...
 				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .5,
 						Math.sin(targetAngle * 2 * Math.PI / 360) * .5,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
@@ -370,7 +360,7 @@ public class Robot extends IterativeRobot {
 		case 3:
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
-				targetAngle = -60;//why is this 60??? shouldn't it be 30???
+				targetAngle = -60;// why is this 60??? shouldn't it be 30???
 			} else {
 				targetAngle = 60;
 			}
@@ -384,7 +374,7 @@ public class Robot extends IterativeRobot {
 			break;
 		case 4:
 			if (autoTimer.get() < 1.5) {
-				//might need to change target angle back to 30
+				// might need to change target angle back to 30
 				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .5,
 						Math.sin(targetAngle * 2 * Math.PI / 360) * .5,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
