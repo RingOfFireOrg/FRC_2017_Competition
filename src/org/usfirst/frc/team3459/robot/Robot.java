@@ -86,6 +86,7 @@ public class Robot extends IterativeRobot {
 		autoChooser = new SendableChooser<Integer>();
 		autoChooser.addObject("GearBoiler", RobotMap.autoGearBoiler);
 		autoChooser.addDefault("GearStraight", RobotMap.autoGearStraight);
+		autoChooser.addObject("GearFeederStation", RobotMap.autoGearFeederStation);
 		SmartDashboard.putData("Auto", autoChooser);
 
 	}
@@ -263,35 +264,39 @@ public class Robot extends IterativeRobot {
 		switch (autoStep) {
 		case 1:
 			// drive to get away from the wall a few inches
-			if (ultrasonicBack.getDistance() < 6) { // may need to + or -
+			SmartDashboard.putNumber("testingauto", ahrs.getAngle());//a test to make sure the selection processs is working
+			if (ultrasonicBack.getDistance() < 15) { // may need to + or -
 													// distance
-				driveTrain.drive(0.0, 0.5, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
+				driveTrain.drive(0.0, 0.2, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
 				autoStep = 2;
 			}
 			break;
 		case 2:
+			SmartDashboard.putNumber("testingauto2", ahrs.getAngle());//a test to make sure the selection process is working
+
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
-				targetAngle = -60;
-				autoStep = 3;
+				targetAngle = -30;
 			} else {
-				targetAngle = 60;
-				autoStep = 3;
+				targetAngle = 30;
 			}
-			break;
-		case 3:
 			// turn to 60 degrees(parallel to line) so we don't hit the airship
 			if (Math.abs(normalizeAngle(ahrs.getAngle() - targetAngle)) < 1) { // bigger
 																				// tolerance?
 				autoStep = 4;
 				autoTimer.reset();
 			} else {
-				driveTrain.turnToAngle(normalizeAngle(targetAngle));
+				//driveTrain.turnToAngle(normalizeAngle(targetAngle));
+				driveTrain.drive(0.0, 0.0, PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
+						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			}
+			
+			
 			break;
 		case 4:
+			SmartDashboard.putNumber("testingauto4", ahrs.getAngle());//a test to make sure the selection process is working
 			// drive x" at .5 speed: get close
 			// total inches we want to drive this direction is 71.37
 			//changed to 51.37 because subtracting half of the bot length bc pivoting at middle of bot
