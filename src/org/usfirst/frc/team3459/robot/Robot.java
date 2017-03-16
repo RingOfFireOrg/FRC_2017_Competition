@@ -301,36 +301,47 @@ public class Robot extends IterativeRobot {
 			// total inches we want to drive this direction is 71.37
 			//changed to 51.37 because subtracting half of the bot length bc pivoting at middle of bot
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
-			if (ultrasonicBack.getDistance() < 30) {//might have changed this number wrong...
-				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .5,
+			if (ultrasonicBack.getDistance() < 80) {//might have changed this number wrong...
+				 
+				  driveTrain.drive(0.0,
+						-0.35,
+						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
+						0.0,
+						PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
+				
+				 /*
+				 driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .5,
 						Math.sin(targetAngle * 2 * Math.PI / 360) * .5,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+				*/
 			} else {
 				autoStep = 5;
 			}
 			break;
 		case 5:
+			SmartDashboard.putNumber("testingauto5", ahrs.getAngle());//a test to make sure the selection process is working
 			// drive the rest of the distance at .2 speed: be accurate
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
-			if (ultrasonicBack.getDistance() < 51.37) {
-				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .2,
-						Math.sin(targetAngle * 2 * Math.PI / 360) * .2,
-						// the following two lines are to correct the drift so
-						// it will drive straight
+			if (ultrasonicBack.getDistance() < 80) {//85 was off that was the last tested
+				driveTrain.drive(0.0,
+						-0.2,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
-						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+						0.0,
+						PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
+				
 			} else {
 				autoStep = 6;
 			}
 			break;
 		case 6:
+			SmartDashboard.putNumber("testingauto6", ahrs.getAngle());//a test to make sure the selection process is working
 			// turn to -30 degrees to face spring
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
-				targetAngle = 30;
+				targetAngle = 60;
 			} else {
-				targetAngle = -30;
+				targetAngle = -60;
 			} // not sure this is right might need to be reversed
 			driveTrain.turnToAngle(normalizeAngle(targetAngle));
 			if (Math.abs(normalizeAngle(ahrs.getAngle() - targetAngle)) < 1) {
@@ -342,6 +353,9 @@ public class Robot extends IterativeRobot {
 			break;
 		case 7:
 			// drive to the spring for x seconds
+			/*
+			 * TODO lower speed of last part
+			 */
 			if (autoTimer.get() < 1.5) {
 				driveTrain.drive(Math.cos(30.0 * 2 * Math.PI / 360) * .5, Math.sin(30.0 * 2 * Math.PI / 360) * .5,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
