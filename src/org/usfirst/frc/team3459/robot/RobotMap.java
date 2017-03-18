@@ -52,6 +52,8 @@ public class RobotMap {
 	public static final int ltcAButton = 2;
 	public static final int ltcBButton = 3;
 	public static final int ltcYButton = 4;
+	public static final int ltcBackButton = 9;
+	public static final int ltcStartButton = 10;
 	// analog ports
 	public static final int ultrasonicBack = 0;
 	public static final int ultrasonicLeft = 1;

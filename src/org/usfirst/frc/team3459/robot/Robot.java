@@ -126,11 +126,11 @@ public class Robot extends IterativeRobot {
 			driveTrain.turnToAngle(-30.0);
 		// driveTrain.mecanumDrive_Cartesian(-0.4, 0.0, 0.0, 0.0);
 
-		if (ltc.getRawButton(RobotMap.ltcAButton)) {
+		if (ltc.getRawButton(RobotMap.ltcStartButton)) {
 			ahrs.reset();
 			ahrs.setAngleAdjustment(180.0);
 		}
-		if (ltc.getRawButton(RobotMap.ltcBButton)) {
+		if (ltc.getRawButton(RobotMap.ltcBackButton)) {
 			ahrs.reset();
 			ahrs.setAngleAdjustment(0.0);
 		}
