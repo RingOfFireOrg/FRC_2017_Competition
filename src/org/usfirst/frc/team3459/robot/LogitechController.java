@@ -17,7 +17,7 @@ public class LogitechController extends Joystick {
 
 
 	private double deadZone(double raw) {
-		if (Math.abs(raw) < 0.2) {
+		if (Math.abs(raw) < 0.1) {
 			return 0.0;
 		}
 		return raw;
