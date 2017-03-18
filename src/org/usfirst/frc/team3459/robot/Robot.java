@@ -138,12 +138,12 @@ public class Robot extends IterativeRobot {
 		double x, y, twist;
 		if (SmartDashboard.getBoolean("is this a logitech controller", true)) {
 
-			x = speedInput(ltc.getLeftX(), ltc.getTriggers());
-			y = speedInput(ltc.getLeftY(), ltc.getTriggers());
+			x = -1*speedInput(ltc.getLeftX(), ltc.getTriggers()); //negative so that gear holder is forward.
+			y = -1*speedInput(ltc.getLeftY(), ltc.getTriggers()); //negative so that gear holder is forward.
 			twist = 0;
 
 			if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
-				double deltaAngle = PTDrive.getDeltaAngle(ltc.getDirection() + 180, ahrs.getAngle());
+				double deltaAngle = PTDrive.getDeltaAngle(ltc.getDirection(), ahrs.getAngle());
 				if (Math.abs(deltaAngle) > 0.5) {
 					twist = PTDrive.getSpeed(deltaAngle);
 				}
@@ -165,6 +165,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("rawangle", ahrs.getAngle());
 		SmartDashboard.putNumber("targetangle", normalizeAngle(pov));
+		
 
 		if (driveStick.getRawButton(RobotMap.btnCameraFront)) {
 			cameras.changeCamera(CameraType.FRONT);
