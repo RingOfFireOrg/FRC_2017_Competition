@@ -245,9 +245,9 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void auto_depositGear() {
-		if (autoTimer.get() < 2.0) {
+		if (autoTimer.get() < 4.0) {
 
-			driveTrain.drive(0.0, 0.5, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
+			driveTrain.drive(0.0, 0.25, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
 					normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			// driveTrain.drive(0.0, 0.4, 0.0, normalizeAngle(ahrs.getAngle()),
 			// PTDrive.DriveType.FIELD_RELATIVE);
@@ -357,8 +357,8 @@ public class Robot extends IterativeRobot {
 			/*
 			 * TODO lower speed of last part
 			 */
-			if (autoTimer.get() < 1.5) {
-				driveTrain.drive(Math.cos(30.0 * 2 * Math.PI / 360) * .5, Math.sin(30.0 * 2 * Math.PI / 360) * .5,
+			if (autoTimer.get() < 3) {
+				driveTrain.drive(Math.cos(30.0 * 2 * Math.PI / 360) * .25, Math.sin(30.0 * 2 * Math.PI / 360) * .25,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
@@ -403,10 +403,10 @@ public class Robot extends IterativeRobot {
 			}
 			break;
 		case 4:
-			if (autoTimer.get() < 1.5) {
+			if (autoTimer.get() < 3) {
 				//might need to change target angle back to 30
-				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .5,
-						Math.sin(targetAngle * 2 * Math.PI / 360) * .5,
+				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .25,
+						Math.sin(targetAngle * 2 * Math.PI / 360) * .25,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
