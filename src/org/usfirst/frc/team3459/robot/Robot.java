@@ -33,6 +33,8 @@ public class Robot extends IterativeRobot {
 	PTDrive.DriveType driveType = PTDrive.DriveType.FIELD_RELATIVE;
 	int autoStep = 1;
 	Timer autoTimer;
+	boolean isJogging = false;
+	double direction = 0.0;
 
 	SendableChooser<Integer> autoChooser;
 	// operations
@@ -135,11 +137,68 @@ public class Robot extends IterativeRobot {
 			ahrs.setAngleAdjustment(0.0);
 		}
 
+		double jogSpeed = 0.2;
+		
+		if (ltc.getRawButton(RobotMap.ltcLeftBumper)) {
+			if (!isJogging) {
+				direction = ahrs.getAngle();
+				isJogging = true;
+			}
+
+			if (ltc.getRawButton(RobotMap.ltcAButton)) {
+				driveTrain.jog(0.0, jogSpeed, direction, ahrs.getAngle());
+			}
+			if (ltc.getRawButton(RobotMap.ltcBButton)) {
+				driveTrain.jog(jogSpeed, 0.0, direction, ahrs.getAngle());
+			}
+			if (ltc.getRawButton(RobotMap.ltcYButton)) {
+				driveTrain.jog(0.0, -jogSpeed, direction, ahrs.getAngle());
+			}
+			if (ltc.getRawButton(RobotMap.ltcXButton)) {
+				driveTrain.jog(-jogSpeed, 0.0, direction, ahrs.getAngle());
+			}
+		} 
+		
+
+		else if (ltc.getRawButton(RobotMap.ltcRightBumper)) {
+			if (!isJogging) {
+				direction = ahrs.getAngle();
+				isJogging = true;
+			}
+			// what shape the buttons are in
+//  y
+//x   b			
+//	a		
+			
+			if (ltc.getRawButton(RobotMap.ltcXButton)) {
+				driveTrain.jog(0.0, jogSpeed, direction, ahrs.getAngle());
+			}
+			if (ltc.getRawButton(RobotMap.ltcYButton)) {
+				driveTrain.jog(jogSpeed, 0.0, direction, ahrs.getAngle());
+			}
+			if (ltc.getRawButton(RobotMap.ltcBButton)) {
+				driveTrain.jog(0.0, -jogSpeed, direction, ahrs.getAngle());
+			}
+			if (ltc.getRawButton(RobotMap.ltcAButton)) {
+				driveTrain.jog(-jogSpeed, 0.0, direction, ahrs.getAngle());
+			}
+		} else {
+			isJogging = false;
+		}
+
 		double x, y, twist;
 		if (SmartDashboard.getBoolean("is this a logitech controller", true)) {
 
-			x = -1*speedInput(ltc.getLeftX(), ltc.getTriggers()); //negative so that gear holder is forward.
-			y = -1*speedInput(ltc.getLeftY(), ltc.getTriggers()); //negative so that gear holder is forward.
+			x = -1 * speedInput(ltc.getLeftX(), ltc.getTriggers()); // negative
+																	// so that
+																	// gear
+																	// holder is
+																	// forward.
+			y = -1 * speedInput(ltc.getLeftY(), ltc.getTriggers()); // negative
+																	// so that
+																	// gear
+																	// holder is
+																	// forward.
 			twist = 0;
 
 			if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
@@ -154,9 +213,7 @@ public class Robot extends IterativeRobot {
 			twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
 		}
 
-		if (driveStick.getRawButton(RobotMap.btnRobotRelBack)) {
-			driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.ROBOT_RELATIVE_BACK);
-		} else {
+		if (!isJogging){
 			driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), driveType);
 		}
 		SmartDashboard.putNumber("distance left", ultrasonicLeft.getDistance());
@@ -165,7 +222,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("rawangle", ahrs.getAngle());
 		SmartDashboard.putNumber("targetangle", normalizeAngle(pov));
-		
 
 		if (driveStick.getRawButton(RobotMap.btnCameraFront)) {
 			cameras.changeCamera(CameraType.FRONT);
@@ -251,8 +307,7 @@ public class Robot extends IterativeRobot {
 					normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			// driveTrain.drive(0.0, 0.4, 0.0, normalizeAngle(ahrs.getAngle()),
 			// PTDrive.DriveType.FIELD_RELATIVE);
-		}
-		else {
+		} else {
 			driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 
 		}
@@ -265,9 +320,17 @@ public class Robot extends IterativeRobot {
 		switch (autoStep) {
 		case 1:
 			// drive to get away from the wall a few inches
-			SmartDashboard.putNumber("testingauto", ahrs.getAngle());//a test to make sure the selection processs is working
+			SmartDashboard.putNumber("testingauto", ahrs.getAngle());// a test
+																		// to
+																		// make
+																		// sure
+																		// the
+																		// selection
+																		// processs
+																		// is
+																		// working
 			if (ultrasonicBack.getDistance() < 15) { // may need to + or -
-													// distance
+														// distance
 				driveTrain.drive(0.0, 0.2, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
@@ -275,7 +338,15 @@ public class Robot extends IterativeRobot {
 			}
 			break;
 		case 2:
-			SmartDashboard.putNumber("testingauto2", ahrs.getAngle());//a test to make sure the selection process is working
+			SmartDashboard.putNumber("testingauto2", ahrs.getAngle());// a test
+																		// to
+																		// make
+																		// sure
+																		// the
+																		// selection
+																		// process
+																		// is
+																		// working
 
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
@@ -289,54 +360,76 @@ public class Robot extends IterativeRobot {
 				autoStep = 4;
 				autoTimer.reset();
 			} else {
-				//driveTrain.turnToAngle(normalizeAngle(targetAngle));
+				// driveTrain.turnToAngle(normalizeAngle(targetAngle));
 				driveTrain.drive(0.0, 0.0, PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			}
-			
-			
+
 			break;
 		case 4:
-			SmartDashboard.putNumber("testingauto4", ahrs.getAngle());//a test to make sure the selection process is working
+			SmartDashboard.putNumber("testingauto4", ahrs.getAngle());// a test
+																		// to
+																		// make
+																		// sure
+																		// the
+																		// selection
+																		// process
+																		// is
+																		// working
 			// drive x" at .5 speed: get close
 			// total inches we want to drive this direction is 71.37
-			//changed to 51.37 because subtracting half of the bot length bc pivoting at middle of bot
+			// changed to 51.37 because subtracting half of the bot length bc
+			// pivoting at middle of bot
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
-			if (ultrasonicBack.getDistance() < 80) {//might have changed this number wrong...
-				 
-				  driveTrain.drive(0.0,
-						-0.35,
-						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
-						0.0,
+			if (ultrasonicBack.getDistance() < 80) {// might have changed this
+													// number wrong...
+
+				driveTrain.drive(0.0, -0.35,
+						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())), 0.0,
 						PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
-				
-				 /*
-				 driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .5,
-						Math.sin(targetAngle * 2 * Math.PI / 360) * .5,
-						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
-						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-				*/
+
+				/*
+				 * driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) *
+				 * .5, Math.sin(targetAngle * 2 * Math.PI / 360) * .5, 0.5 *
+				 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle,
+				 * ahrs.getAngle())), normalizeAngle(ahrs.getAngle()),
+				 * PTDrive.DriveType.FIELD_RELATIVE);
+				 */
 			} else {
 				autoStep = 5;
 			}
 			break;
 		case 5:
-			SmartDashboard.putNumber("testingauto5", ahrs.getAngle());//a test to make sure the selection process is working
+			SmartDashboard.putNumber("testingauto5", ahrs.getAngle());// a test
+																		// to
+																		// make
+																		// sure
+																		// the
+																		// selection
+																		// process
+																		// is
+																		// working
 			// drive the rest of the distance at .2 speed: be accurate
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
-			if (ultrasonicBack.getDistance() < 80) {//85 was off that was the last tested
-				driveTrain.drive(0.0,
-						-0.2,
-						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
-						0.0,
-						PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
-				
+			if (ultrasonicBack.getDistance() < 80) {// 85 was off that was the
+													// last tested
+				driveTrain.drive(0.0, -0.2, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
+						0.0, PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
+
 			} else {
 				autoStep = 6;
 			}
 			break;
 		case 6:
-			SmartDashboard.putNumber("testingauto6", ahrs.getAngle());//a test to make sure the selection process is working
+			SmartDashboard.putNumber("testingauto6", ahrs.getAngle());// a test
+																		// to
+																		// make
+																		// sure
+																		// the
+																		// selection
+																		// process
+																		// is
+																		// working
 			// turn to -30 degrees to face spring
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
@@ -390,7 +483,7 @@ public class Robot extends IterativeRobot {
 		case 3:
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
-				targetAngle = -60;//why is this 60??? shouldn't it be 30???
+				targetAngle = -60;// why is this 60??? shouldn't it be 30???
 			} else {
 				targetAngle = 60;
 			}
@@ -404,7 +497,7 @@ public class Robot extends IterativeRobot {
 			break;
 		case 4:
 			if (autoTimer.get() < 3) {
-				//might need to change target angle back to 30
+				// might need to change target angle back to 30
 				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .25,
 						Math.sin(targetAngle * 2 * Math.PI / 360) * .25,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),

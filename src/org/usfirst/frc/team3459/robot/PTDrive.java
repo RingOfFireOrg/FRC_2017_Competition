@@ -24,6 +24,12 @@ public class PTDrive extends RobotDrive {
 
 	}
 
+	public void jog(double x, double y, double direction, double gyroAngle) {
+		double twistSlow = 0.3;
+		drive(x, y, twistSlow * PTDrive.getSpeed(PTDrive.getDeltaAngle(direction, gyroAngle)), 0.0,
+				PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
+	}
+
 	public static PTDrive buildDrive(final int frontLeftMotor, final int rearLeftMotor, final int frontRightMotor,
 			final int rearRightMotor) {
 		DigitalInput input = new DigitalInput(RobotMap.TestBotCartridge);
@@ -61,7 +67,7 @@ public class PTDrive extends RobotDrive {
 	public static double getSpeed(double deltaAngle) {
 		double scale = 0.35;
 		double offset = 0.15;
-		if (deltaAngle < 0.0){
+		if (deltaAngle < 0.0) {
 			offset = offset * -1;
 		}
 		return (((deltaAngle / 180.0) * scale) + offset);
@@ -74,7 +80,7 @@ public class PTDrive extends RobotDrive {
 			SmartDashboard.putString("driveMode", "robot relative front");
 			break;
 
-		case ROBOT_RELATIVE_BACK:	
+		case ROBOT_RELATIVE_BACK:
 			mecanumDrive_Cartesian(x, y, twist, 0.0);
 			SmartDashboard.putString("driveMode", "robot relative back");
 			break;
@@ -103,34 +109,22 @@ public class PTDrive extends RobotDrive {
 			internalDrive(x, y, twist, currentAngle, driveType);
 		}
 	}
-	void test(boolean front, boolean left, double speed)
-	{
 
-		if(front== true)
-		{
-			if(left== true)
-			{
+	void test(boolean front, boolean left, double speed) {
+
+		if (front == true) {
+			if (left == true) {
 				m_frontLeftMotor.set(speed);
-			}
-			else
-			{
+			} else {
 				m_frontRightMotor.set(speed);
 			}
-		}
-		else
-		{
-			if(left== true)
-			{
+		} else {
+			if (left == true) {
 				m_rearLeftMotor.set(speed);
-			}
-			else
-			{
+			} else {
 				m_rearRightMotor.set(speed);
 			}
 		}
-		
-		
-		
-		
+
 	}
 }
