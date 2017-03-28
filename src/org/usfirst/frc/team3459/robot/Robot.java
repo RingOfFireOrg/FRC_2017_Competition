@@ -354,6 +354,7 @@ public class Robot extends IterativeRobot {
 			break;
 		case 7:
 			// drive to the spring for x seconds
+			//this goes the wrong direction exactly 180 off
 			/*
 			 * TODO lower speed of last part
 			 */
@@ -413,6 +414,29 @@ public class Robot extends IterativeRobot {
 				driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			}
 		}
+		}
+		public void auto_depositGearBoilerPlusShoot(DriverStation.Alliance myAlliance) {
+			switch (autoStep) {
+			case 1:
+				if (myAlliance == DriverStation.Alliance.Red) {
+					targetAngle = 45;//ultrasonic sensor should be facing wall
+				} else {
+					targetAngle = -45;
+				}
+				driveTrain.turnToAngle(normalizeAngle(targetAngle));
+				if (Math.abs(normalizeAngle(ahrs.getAngle() - targetAngle)) < 1) {
+					autoStep = 2;
+				} else {
+					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+				}
+				break;
+			case 2:
+				if(ultrasonicBack.getDistance() < 59.25)
+				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .25,
+						Math.sin(targetAngle * 2 * Math.PI / 360) * .25,
+						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
+						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+			}
 	}
 
 	public void testInit() {
