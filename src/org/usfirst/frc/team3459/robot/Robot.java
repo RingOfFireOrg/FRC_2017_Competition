@@ -137,7 +137,13 @@ public class Robot extends IterativeRobot {
 			ahrs.setAngleAdjustment(0.0);
 		}
 
-		double jogSpeed = 0.2;
+		if (ltc.getRawButton(RobotMap.ltcPressLeftStick))
+			driveType = PTDrive.DriveType.FIELD_RELATIVE;
+		
+		if (ltc.getRawButton(RobotMap.ltcPressRightStick))
+			driveType = PTDrive.DriveType.ROBOT_RELATIVE_FRONT;
+		
+		double jogSpeed = 0.25;
 		
 		if (ltc.getRawButton(RobotMap.ltcLeftBumper)) {
 			if (!isJogging) {
@@ -170,13 +176,13 @@ public class Robot extends IterativeRobot {
 //x   b			
 //	a		
 			
-			if (ltc.getRawButton(RobotMap.ltcXButton)) {
+			if (ltc.getRawButton(RobotMap.ltcBButton)) {
 				driveTrain.jog(0.0, jogSpeed, direction, ahrs.getAngle());
 			}
 			if (ltc.getRawButton(RobotMap.ltcYButton)) {
 				driveTrain.jog(jogSpeed, 0.0, direction, ahrs.getAngle());
 			}
-			if (ltc.getRawButton(RobotMap.ltcBButton)) {
+			if (ltc.getRawButton(RobotMap.ltcXButton)) {
 				driveTrain.jog(0.0, -jogSpeed, direction, ahrs.getAngle());
 			}
 			if (ltc.getRawButton(RobotMap.ltcAButton)) {
