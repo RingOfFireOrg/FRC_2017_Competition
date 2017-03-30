@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
 	PTDrive.DriveType driveType = PTDrive.DriveType.FIELD_RELATIVE;
 	int autoStep = 1;
 	Timer autoTimer;
-	boolean isJogging = false;
+	// boolean isJogging = false;
 	double direction = 0.0;
 
 	SendableChooser<Integer> autoChooser;
@@ -136,13 +136,15 @@ public class Robot extends IterativeRobot {
 			ahrs.reset();
 			ahrs.setAngleAdjustment(0.0);
 		}
-
+/*
 		if (ltc.getRawButton(RobotMap.ltcPressLeftStick))
 			driveType = PTDrive.DriveType.FIELD_RELATIVE;
 		
 		if (ltc.getRawButton(RobotMap.ltcPressRightStick))
 			driveType = PTDrive.DriveType.ROBOT_RELATIVE_FRONT;
+*/
 		
+		/*
 		double jogSpeed = 0.25;
 		
 		if (ltc.getRawButton(RobotMap.ltcLeftBumper)) {
@@ -191,7 +193,8 @@ public class Robot extends IterativeRobot {
 		} else {
 			isJogging = false;
 		}
-
+*/
+		
 		double x, y, twist;
 		if (SmartDashboard.getBoolean("is this a logitech controller", true)) {
 
@@ -219,9 +222,9 @@ public class Robot extends IterativeRobot {
 			twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
 		}
 
-		if (!isJogging){
-			driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), driveType);
-		}
+		
+		driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), driveType);
+		
 		SmartDashboard.putNumber("distance left", ultrasonicLeft.getDistance());
 		SmartDashboard.putNumber("distance right", ultrasonicRight.getDistance());
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());

@@ -23,13 +23,14 @@ public class PTDrive extends RobotDrive {
 		setInvertedMotor(MotorType.kRearRight, true);
 
 	}
-
+/*
 	public void jog(double x, double y, double direction, double gyroAngle) {
 		double twistSlow = 0.3;
 		drive(x, y, twistSlow * PTDrive.getSpeed(PTDrive.getDeltaAngle(direction, gyroAngle)), 0.0,
 				PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
 	}
-
+*/
+	
 	public static PTDrive buildDrive(final int frontLeftMotor, final int rearLeftMotor, final int frontRightMotor,
 			final int rearRightMotor) {
 		DigitalInput input = new DigitalInput(RobotMap.TestBotCartridge);
