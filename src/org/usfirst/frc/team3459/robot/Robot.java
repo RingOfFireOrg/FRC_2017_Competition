@@ -1,13 +1,10 @@
 package org.usfirst.frc.team3459.robot;
 
-import org.usfirst.frc.team3459.robot.Cameras.CameraType;
-
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -40,15 +37,11 @@ public class Robot extends IterativeRobot {
 	// operations
 
 	AHRS ahrs;
-	// Joystick leftStick = new Joystick(RobotMap.leftStick);
-	// Joystick rightStick = new Joystick(RobotMap.rightStick);
-	Joystick driveStick = new Joystick(RobotMap.driveStick);
+	
+	
 	LogitechController ltc = new LogitechController(5);
-	// XBoxController xbc = new XBoxController(RobotMap.xBoxController);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
-	// TurnToAngleController angleButtons = new
-	// TurnToAngleController(RobotMap.turnToAngleController);
-
+	
 	public double speedInput(double input, boolean slow) {
 		double output;
 		if (slow)
@@ -106,140 +99,42 @@ public class Robot extends IterativeRobot {
 	 * 20ms)
 	 */
 	public void teleopPeriodic() {
-		int pov = driveStick.getPOV();
 
-		if (pov != -1) {
-			driveTrain.turnToAngle(normalizeAngle(pov));
-		}
-
-		if (driveStick.getRawButton(RobotMap.btnStopTurn)) {
-			driveTrain.stopTurnToAngle();
-		}
-		if (driveStick.getRawButton(RobotMap.btnRobotRel))
-			driveType = PTDrive.DriveType.ROBOT_RELATIVE_FRONT;
-		if (driveStick.getRawButton(RobotMap.btnFieldRel))
-			driveType = PTDrive.DriveType.FIELD_RELATIVE;
-
-		if (driveStick.getRawButton(RobotMap.btnTurnRight))
-			driveTrain.turnToAngle(30.0);
-		// driveTrain.mecanumDrive_Cartesian(0.4, 0.0, 0, ROBOT_RELATIVE_FRONT);
-
-		if (driveStick.getRawButton(RobotMap.btnTurnLeft))
-			driveTrain.turnToAngle(-30.0);
-		// driveTrain.mecanumDrive_Cartesian(-0.4, 0.0, 0.0, 0.0);
-
-		if (ltc.getRawButton(RobotMap.ltcStartButton)) {
-			ahrs.reset();
-			ahrs.setAngleAdjustment(180.0);
-		}
 		if (ltc.getRawButton(RobotMap.ltcBackButton)) {
 			ahrs.reset();
 			ahrs.setAngleAdjustment(0.0);
 		}
-/*
- * 
-		if (ltc.getRawButton(RobotMap.ltcPressLeftStick))
-			driveType = PTDrive.DriveType.FIELD_RELATIVE;
-		
-		if (ltc.getRawButton(RobotMap.ltcPressRightStick))
-			driveType = PTDrive.DriveType.ROBOT_RELATIVE_FRONT;
-*/
-		
-		/*
-		double jogSpeed = 0.25;
-		
-		if (ltc.getRawButton(RobotMap.ltcLeftBumper)) {
-			if (!isJogging) {
-				direction = ahrs.getAngle();
-				isJogging = true;
-			}
 
-			if (ltc.getRawButton(RobotMap.ltcAButton)) {
-				driveTrain.jog(0.0, jogSpeed, direction, ahrs.getAngle());
-			}
-			if (ltc.getRawButton(RobotMap.ltcBButton)) {
-				driveTrain.jog(jogSpeed, 0.0, direction, ahrs.getAngle());
-			}
-			if (ltc.getRawButton(RobotMap.ltcYButton)) {
-				driveTrain.jog(0.0, -jogSpeed, direction, ahrs.getAngle());
-			}
-			if (ltc.getRawButton(RobotMap.ltcXButton)) {
-				driveTrain.jog(-jogSpeed, 0.0, direction, ahrs.getAngle());
-			}
-		} 
-		
-
-		else if (ltc.getRawButton(RobotMap.ltcRightBumper)) {
-			if (!isJogging) {
-				direction = ahrs.getAngle();
-				isJogging = true;
-			}
-			// what shape the buttons are in
-//  y
-//x   b			
-//	a		
-			
-			if (ltc.getRawButton(RobotMap.ltcBButton)) {
-				driveTrain.jog(0.0, jogSpeed, direction, ahrs.getAngle());
-			}
-			if (ltc.getRawButton(RobotMap.ltcYButton)) {
-				driveTrain.jog(jogSpeed, 0.0, direction, ahrs.getAngle());
-			}
-			if (ltc.getRawButton(RobotMap.ltcXButton)) {
-				driveTrain.jog(0.0, -jogSpeed, direction, ahrs.getAngle());
-			}
-			if (ltc.getRawButton(RobotMap.ltcAButton)) {
-				driveTrain.jog(-jogSpeed, 0.0, direction, ahrs.getAngle());
-			}
-		} else {
-			isJogging = false;
-		}
-*/
-		
 		double x, y, twist;
-		if (SmartDashboard.getBoolean("is this a logitech controller", true)) {
 
-			x = -1 * speedInput(ltc.getLeftX(), ltc.getTriggers()); // negative
-																	// so that
-																	// gear
-																	// holder is
-																	// forward.
-			y = -1 * speedInput(ltc.getLeftY(), ltc.getTriggers()); // negative
-																	// so that
-																	// gear
-																	// holder is
-																	// forward.
-			twist = 0;
+		x = -1 * speedInput(ltc.getLeftX(), ltc.getTriggers()); // negative
+																// so that
+																// gear
+																// holder is
+																// forward.
 
-			if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
-				double deltaAngle = PTDrive.getDeltaAngle(ltc.getDirection(), ahrs.getAngle());
-				if (Math.abs(deltaAngle) > 0.5) {
-					twist = PTDrive.getSpeed(deltaAngle);
-				}
+		y = -1 * speedInput(ltc.getLeftY(), ltc.getTriggers()); // negative
+																// so that
+																// gear
+																// holder is
+																// forward.
+		twist = 0;
+
+		if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
+			double deltaAngle = PTDrive.getDeltaAngle(ltc.getDirection(), ahrs.getAngle());
+			if (Math.abs(deltaAngle) > 0.5) {
+				twist = PTDrive.getSpeed(deltaAngle);
 			}
-		} else {
-			x = speedInput(driveStick.getX(), driveStick.getTrigger());
-			y = speedInput(driveStick.getY(), driveStick.getTrigger());
-			twist = speedInput(driveStick.getTwist(), driveStick.getTrigger());
 		}
 
-		
 		driveTrain.drive(x, y, twist, normalizeAngle(ahrs.getAngle()), driveType);
-		
+
 		SmartDashboard.putNumber("distance left", ultrasonicLeft.getDistance());
 		SmartDashboard.putNumber("distance right", ultrasonicRight.getDistance());
 		SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 		SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 		SmartDashboard.putNumber("rawangle", ahrs.getAngle());
-		SmartDashboard.putNumber("targetangle", normalizeAngle(pov));
 
-		if (driveStick.getRawButton(RobotMap.btnCameraFront)) {
-			cameras.changeCamera(CameraType.FRONT);
-
-		}
-		if (driveStick.getRawButton(RobotMap.btnCameraBack)) {
-			cameras.changeCamera(CameraType.BACK);
-		}
 		// manipulator
 		if (controlPanel.getShooter()) {
 			shooter.startFeeder();

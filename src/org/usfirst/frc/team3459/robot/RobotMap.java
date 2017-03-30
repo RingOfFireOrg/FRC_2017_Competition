@@ -35,9 +35,9 @@ public class RobotMap {
 	// public static int leftStick = 1; not currently used
 	// public static int rightStick = 2; not currently used
 	public static final int driveStick = 0;
-	public static final int xBoxController = 3;
+	//public static final int xBoxController = 3;
 	public static final int controlPanel = 1;
-	public static final int turnToAngleController = 2;
+	//public static final int turnToAngleController = 2;
 	// driver buttons
 	public static final int btnStopTurn = 2;
 	public static final int btnRobotRel = 7;
