@@ -137,6 +137,7 @@ public class Robot extends IterativeRobot {
 			ahrs.setAngleAdjustment(0.0);
 		}
 /*
+ * 
 		if (ltc.getRawButton(RobotMap.ltcPressLeftStick))
 			driveType = PTDrive.DriveType.FIELD_RELATIVE;
 		
