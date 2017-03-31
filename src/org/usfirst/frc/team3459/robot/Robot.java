@@ -43,11 +43,12 @@ public class Robot extends IterativeRobot {
 
 	public double speedInput(double input, boolean slow) {
 		double output;
-		if (slow)
-			input = input * 0.65;
+
 		output = input * input;
 		if (input < 0.0)
 			output = output * -1.0;
+		if (slow)
+			output = output * 0.65;
 		return output;
 	}
 
@@ -113,10 +114,10 @@ public class Robot extends IterativeRobot {
 																// forward.
 
 		y = -1 * speedInput(ltc.getLeftY(), ltc.getTriggers()); // negative
-																// so that
-																// gear
-																// holder is
-																// forward.
+		// so that
+		// gear
+		// holder is
+		// forward.
 		twist = 0;
 
 		if (Math.abs(ltc.getRightX()) > 0.1 || Math.abs(ltc.getRightY()) > 0.1) {
@@ -235,7 +236,8 @@ public class Robot extends IterativeRobot {
 																		// working
 			if (ultrasonicBack.getDistance() < 15) { // may need to + or -
 														// distance
-				driveTrain.drive(0.0, 0.2, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
+				driveTrain.drive(0.0, 0.25, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
+
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
 				autoStep = 2;
@@ -285,7 +287,8 @@ public class Robot extends IterativeRobot {
 			// changed to 51.37 because subtracting half of the bot length bc
 			// pivoting at middle of bot
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
-			if (ultrasonicBack.getDistance() < 80) {// might have changed this
+
+			if (ultrasonicBack.getDistance() < 60) {// might have changed this
 													// number wrong...
 
 				driveTrain.drive(0.0, -0.35,
@@ -362,15 +365,10 @@ public class Robot extends IterativeRobot {
 						PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
 			 */
 			if (autoTimer.get() < 3) {
-				
-				driveTrain.drive(0.0, -0.25,
-						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())), 0.0,
-						PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
-				/*
-				driveTrain.drive(Math.cos(30.0 * 2 * Math.PI / 360) * .25, Math.sin(30.0 * 2 * Math.PI / 360) * .25,
+				driveTrain.drive(-Math.signum(targetAngle) * Math.cos(-targetAngle * Math.PI / 360) * .25,
+						Math.sin(Math.abs(targetAngle) * Math.PI / 360) * .25,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-				*/
 			} else {
 				driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			}
@@ -392,7 +390,8 @@ public class Robot extends IterativeRobot {
 			break;
 		case 2:
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
-			if (ultrasonicBack.getDistance() < 59.25) {
+			// Original number is 59.25 based on the math
+			if (ultrasonicBack.getDistance() < 58.25) {
 				driveTrain.drive(0.0, 0.2, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
@@ -421,14 +420,10 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (autoTimer.get() < 3) {
 				// might need to change target angle back to 30
-			//	driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .25,
-			//			Math.sin(targetAngle * 2 * Math.PI / 360) * .25,
-			//			0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
-			//			normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-				SmartDashboard.putNumber("autoTargetAnglecase4", targetAngle);
-				driveTrain.drive(0.0, -0.25, 0.0 // no twist so it should just go straight
-						, 0.0,
-						PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
+				driveTrain.drive(-Math.signum(targetAngle) * Math.cos(-targetAngle * Math.PI / 360) * .25,
+						Math.sin(Math.abs(targetAngle) * Math.PI / 360) * .25,
+						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
+						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
 				driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			}
