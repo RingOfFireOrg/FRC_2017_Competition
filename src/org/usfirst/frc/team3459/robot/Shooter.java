@@ -16,7 +16,7 @@ public class Shooter {
 	}
 
 	public boolean startWheels() {
-		double wheelSpeed = SmartDashboard.getNumber("Shooter Speed", -0.47);  //TODO: Needs to be changed 
+		double wheelSpeed = SmartDashboard.getNumber("Shooter Speed", -1.0);  //TODO: Needs to be changed 
 		//A negative speed is required in the shooter to shoot balls normally
 		SmartDashboard.putNumber("Shooter Speed", wheelSpeed);
 		wheelControl.set(wheelSpeed); 
