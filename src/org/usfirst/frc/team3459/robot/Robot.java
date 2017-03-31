@@ -37,14 +37,13 @@ public class Robot extends IterativeRobot {
 	// operations
 
 	AHRS ahrs;
-	
-	
+
 	LogitechController ltc = new LogitechController(5);
 	ControlPanel controlPanel = new ControlPanel(RobotMap.controlPanel);
-	
+
 	public double speedInput(double input, boolean slow) {
 		double output;
-		
+
 		output = input * input;
 		if (input < 0.0)
 			output = output * -1.0;
@@ -229,10 +228,18 @@ public class Robot extends IterativeRobot {
 		case 1:
 			// drive to get away from the wall a few inches
 
-			SmartDashboard.putNumber("testingauto", ahrs.getAngle());//a test to make sure the selection process is working
+			SmartDashboard.putNumber("testingauto", ahrs.getAngle());// a test
+																		// to
+																		// make
+																		// sure
+																		// the
+																		// selection
+																		// process
+																		// is
+																		// working
 
 			if (ultrasonicBack.getDistance() < 15) { // may need to + or -
-													// distance
+														// distance
 				driveTrain.drive(0.0, 0.25, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
 
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
@@ -285,12 +292,11 @@ public class Robot extends IterativeRobot {
 			// pivoting at middle of bot
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 
-			if (ultrasonicBack.getDistance() < 60) {//might have changed this number wrong...
-				 
-				  driveTrain.drive(0.0,
-						-0.35,
-						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
-						0.0,
+			if (ultrasonicBack.getDistance() < 60) {// might have changed this
+													// number wrong...
+
+				driveTrain.drive(0.0, -0.35,
+						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())), 0.0,
 
 						PTDrive.DriveType.ROBOT_RELATIVE_FRONT);
 
@@ -353,7 +359,7 @@ public class Robot extends IterativeRobot {
 			break;
 		case 7:
 			// drive to the spring for x seconds
-			//this goes the wrong direction exactly 180 off
+			// this goes the wrong direction exactly 180 off
 			/*
 			 * TODO lower speed of last part
 			 */
@@ -362,9 +368,12 @@ public class Robot extends IterativeRobot {
 						Math.sin(Math.abs(targetAngle) * Math.PI / 360) * .25,
 						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-//				driveTrain.drive(Math.cos(30.0 * 2 * Math.PI / 360) * .25, Math.sin(30.0 * 2 * Math.PI / 360) * .25,
-//						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
-//						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
+				// driveTrain.drive(Math.cos(30.0 * 2 * Math.PI / 360) * .25,
+				// Math.sin(30.0 * 2 * Math.PI / 360) * .25,
+				// 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle,
+				// ahrs.getAngle())),
+				// normalizeAngle(ahrs.getAngle()),
+				// PTDrive.DriveType.FIELD_RELATIVE);
 			} else {
 				driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			}
@@ -384,7 +393,7 @@ public class Robot extends IterativeRobot {
 			break;
 		case 2:
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
-			//Original number is 59.25 based on the math
+			// Original number is 59.25 based on the math
 			if (ultrasonicBack.getDistance() < 58.25) {
 				driveTrain.drive(0.0, 0.2, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
 						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
@@ -409,7 +418,7 @@ public class Robot extends IterativeRobot {
 			break;
 		case 4:
 			if (autoTimer.get() < 3) {
-				//might need to change target angle back to 30
+				// might need to change target angle back to 30
 				driveTrain.drive(-Math.signum(targetAngle) * Math.cos(-targetAngle * Math.PI / 360) * .25,
 						Math.sin(Math.abs(targetAngle) * Math.PI / 360) * .25,
 
@@ -419,29 +428,6 @@ public class Robot extends IterativeRobot {
 				driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
 			}
 		}
-		}
-		public void auto_depositGearBoilerPlusShoot(DriverStation.Alliance myAlliance) {
-			switch (autoStep) {
-			case 1:
-				if (myAlliance == DriverStation.Alliance.Red) {
-					targetAngle = 45;//ultrasonic sensor should be facing wall
-				} else {
-					targetAngle = -45;
-				}
-				driveTrain.turnToAngle(normalizeAngle(targetAngle));
-				if (Math.abs(normalizeAngle(ahrs.getAngle() - targetAngle)) < 1) {
-					autoStep = 2;
-				} else {
-					driveTrain.drive(0.0, 0.0, 0.0, normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-				}
-				break;
-			case 2:
-				if(ultrasonicBack.getDistance() < 59.25)
-				driveTrain.drive(Math.cos(targetAngle * 2 * Math.PI / 360) * .25,
-						Math.sin(targetAngle * 2 * Math.PI / 360) * .25,
-						0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(targetAngle, ahrs.getAngle())),
-						normalizeAngle(ahrs.getAngle()), PTDrive.DriveType.FIELD_RELATIVE);
-			}
 	}
 
 	public void testInit() {
