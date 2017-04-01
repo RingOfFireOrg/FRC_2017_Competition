@@ -92,6 +92,8 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		// ahrs.reset();
 		SmartDashboard.putBoolean("is this a logitech controller", true);
+		shooter.stopWheels();
+		shooter.stopFeeder();
 	}
 
 	/**
@@ -173,9 +175,13 @@ public class Robot extends IterativeRobot {
 
 		SmartDashboard.putNumber("Autonomous Program", selector);
 
+		shooter.stopWheels();
+		shooter.stopFeeder();
+		
 		autoStep = 1;
 		autoTimer.reset();
 		autoTimer.start();
+		
 	}
 
 	/**
@@ -225,15 +231,6 @@ public class Robot extends IterativeRobot {
 		switch (autoStep) {
 		case 1:
 			// drive to get away from the wall a few inches
-			SmartDashboard.putNumber("testingauto", ahrs.getAngle());// a test
-																		// to
-																		// make
-																		// sure
-																		// the
-																		// selection
-																		// processs
-																		// is
-																		// working
 			if (ultrasonicBack.getDistance() < 15) { // may need to + or -
 														// distance
 				driveTrain.drive(0.0, 0.25, 0.5 * PTDrive.getSpeed(PTDrive.getDeltaAngle(0, ahrs.getAngle())),
@@ -244,16 +241,6 @@ public class Robot extends IterativeRobot {
 			}
 			break;
 		case 2:
-			SmartDashboard.putNumber("testingauto2", ahrs.getAngle());// a test
-																		// to
-																		// make
-																		// sure
-																		// the
-																		// selection
-																		// process
-																		// is
-																		// working
-
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
 				targetAngle = -30;
@@ -273,15 +260,6 @@ public class Robot extends IterativeRobot {
 
 			break;
 		case 4:
-			SmartDashboard.putNumber("testingauto4", ahrs.getAngle());// a test
-																		// to
-																		// make
-																		// sure
-																		// the
-																		// selection
-																		// process
-																		// is
-																		// working
 			// drive x" at .5 speed: get close
 			// total inches we want to drive this direction is 71.37
 			// changed to 51.37 because subtracting half of the bot length bc
@@ -307,15 +285,6 @@ public class Robot extends IterativeRobot {
 			}
 			break;
 		case 5:
-			SmartDashboard.putNumber("testingauto5", ahrs.getAngle());// a test
-																		// to
-																		// make
-																		// sure
-																		// the
-																		// selection
-																		// process
-																		// is
-																		// working
 			// drive the rest of the distance at .2 speed: be accurate
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 			if (ultrasonicBack.getDistance() < 85) {// 85 was off that was the
@@ -328,15 +297,6 @@ public class Robot extends IterativeRobot {
 			}
 			break;
 		case 6:
-			SmartDashboard.putNumber("testingauto6", ahrs.getAngle());// a test
-																		// to
-																		// make
-																		// sure
-																		// the
-																		// selection
-																		// process
-																		// is
-																		// working
 			// turn to -30 degrees to face spring
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			if (myAlliance == DriverStation.Alliance.Red) {
@@ -378,6 +338,7 @@ public class Robot extends IterativeRobot {
 	public void auto_depositGearBoiler(DriverStation.Alliance myAlliance) {
 		switch (autoStep) {
 		case 1:
+			shooter.startWheels();
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 			//shooter.startWheels();
 			if (ultrasonicBack.getDistance() < 40) {
@@ -400,6 +361,7 @@ public class Robot extends IterativeRobot {
 			}
 			break;
 		case 3:
+			shooter.startFeeder();
 			SmartDashboard.putNumber("angle", normalizeAngle(ahrs.getAngle()));
 			SmartDashboard.putNumber("autoTargetAnglecase3", targetAngle);
 			if (myAlliance == DriverStation.Alliance.Red) {
