@@ -266,7 +266,7 @@ public class Robot extends IterativeRobot {
 			// pivoting at middle of bot
 			SmartDashboard.putNumber("distance back", ultrasonicBack.getDistance());
 
-			if (ultrasonicBack.getDistance() < 60) {// might have changed this
+			if (ultrasonicBack.getDistance() < 40) {// might have changed this
 													// number wrong...
 
 				driveTrain.drive(0.0, -0.35,
